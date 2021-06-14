@@ -17,87 +17,87 @@
       },
 
       {
-         "short_name": "",
-         "long_name": "",
-         "abstract": "",
-         "in_folder": "",
-         "website": "",
-         "instances": 0,
-         "attributes": 0,
+         "short_name": "glass",
+         "long_name": "Glass Identification Data Set",
+         "abstract": "From USA Forensic Science Service; 6 types of glass; defined in terms of their oxide content (i.e. Na, Fe, K, etc)",
+         "in_folder": "./data/glass",
+         "website": "https://archive.ics.uci.edu/ml/datasets/glass+identification",
+         "instances": 214,
+         "attributes": 10,
          "missing_values": "false",
          "remove_attributes": [],
          "remove_instances": [],
-         "active": "false"
+         "active": "true"
       },
 
       {
-         "short_name": "",
-         "long_name": "",
-         "abstract": "",
-         "in_folder": "",
+         "short_name": "hepatitis",
+         "long_name": "Hepatitis Data Set",
+         "abstract": "From G.Gong: CMU; Mostly Boolean or numeric-valued attribute types; Includes cost data (donated by Peter Turney)",
+         "in_folder": "./data/hepatitis",
          "website": "",
-         "instances": 0,
-         "attributes": 0,
-         "missing_values": "false",
+         "instances": 155,
+         "attributes": 19,
+         "missing_values": "true",
          "remove_attributes": [],
          "remove_instances": [],
-         "active": "false"
+         "active": "true"
       },
 
       {
-         "short_name": "",
-         "long_name": "",
-         "abstract": "",
-         "in_folder": "",
-         "website": "",
-         "instances": 0,
-         "attributes": 0,
+         "short_name": "cardio",
+         "long_name": "Cardiotocography Data Set",
+         "abstract": "The dataset consists of measurements of fetal heart rate (FHR) and uterine contraction (UC) features on cardiotocograms classified by expert obstetricians.",
+         "in_folder": "./data/cardio",
+         "website": "https://archive.ics.uci.edu/ml/datasets/cardiotocography",
+         "instances": 2126,
+         "attributes": 23,
          "missing_values": "false",
          "remove_attributes": [],
          "remove_instances": [],
-         "active": "false"
+         "active": "true"
       },
 
       {
-         "short_name": "",
-         "long_name": "",
-         "abstract": "",
-         "in_folder": "",
-         "website": "",
-         "instances": 0,
-         "attributes": 0,
-         "missing_values": "false",
+         "short_name": "breast",
+         "long_name": "Breast Cancer Wisconsin (Prognostic) Data Set",
+         "abstract": "Prognostic Wisconsin Breast Cancer Database",
+         "in_folder": "./data/breast",
+         "website": "https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic)",
+         "instances": 198,
+         "attributes": 34,
+         "missing_values": "true",
          "remove_attributes": [],
          "remove_instances": [],
-         "active": "false"
+         "active": "true"
       },
 
       {
-         "short_name": "",
-         "long_name": "",
-         "abstract": "",
-         "in_folder": "",
-         "website": "",
-         "instances": 0,
-         "attributes": 0,
+         "short_name": "wine",
+         "long_name": "Wine Data Set",
+         "abstract": "Using chemical analysis determine the origin of wines",
+         "in_folder": "./data/wine",
+         "website": "https://archive.ics.uci.edu/ml/datasets/wine",
+         "instances": 178,
+         "attributes": 13,
          "missing_values": "false",
          "remove_attributes": [],
          "remove_instances": [],
-         "active": "false"
+         "active": "true"
       },
 
       {
-         "short_name": "",
-         "long_name": "",
-         "abstract": "",
-         "in_folder": "",
-         "website": "",
-         "instances": 0,
-         "attributes": 0,
+         "short_name": "german",
+         "long_name": "Statlog (German Credit Data) Data Set",
+         "abstract": "This dataset classifies people described by a set of attributes as good or bad credit risks. Comes in two formats (one all numeric). Also comes with a cost matrix",
+         "in_folder": "./data/german",
+         "website": "https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)",
+         "instances": 1000,
+         "attributes": 20,
          "missing_values": "false",
          "remove_attributes": [],
          "remove_instances": [],
-         "active": "false"
+         "active": "true"
       },
 
    ]
