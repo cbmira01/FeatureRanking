@@ -25,21 +25,7 @@
          "instances": 214,
          "attributes": 11,
          "missing_values": "false",
-         "remove_attributes": [],
-         "remove_instances": [],
-         "active": "true"
-      },
-
-      {
-         "short_name": "hepatitis",
-         "long_name": "Hepatitis Data Set",
-         "abstract": "From G.Gong: CMU; Mostly Boolean or numeric-valued attribute types; Includes cost data (donated by Peter Turney)",
-         "in_folder": "./data/hepatitis",
-         "website": "",
-         "instances": 155,
-         "attributes": 19,
-         "missing_values": "true",
-         "remove_attributes": [],
+         "remove_attributes": [1, 11],
          "remove_instances": [],
          "active": "true"
       },
@@ -53,7 +39,7 @@
          "instances": 2126,
          "attributes": 23,
          "missing_values": "false",
-         "remove_attributes": [],
+         "remove_attributes": [23],
          "remove_instances": [],
          "active": "true"
       },
