@@ -23,7 +23,7 @@
          "in_folder": "./data/glass",
          "website": "https://archive.ics.uci.edu/ml/datasets/glass+identification",
          "instances": 214,
-         "attributes": 10,
+         "attributes": 11,
          "missing_values": "false",
          "remove_attributes": [],
          "remove_instances": [],
