@@ -79,9 +79,9 @@
          "in_folder": "./data/german",
          "website": "https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)",
          "instances": 1000,
-         "attributes": 20,
+         "attributes": 25,
          "missing_values": "false",
-         "remove_attributes": [],
+         "remove_attributes": [25],
          "remove_instances": [],
          "active": "true"
       },
