@@ -65,9 +65,9 @@
          "in_folder": "./data/wine",
          "website": "https://archive.ics.uci.edu/ml/datasets/wine",
          "instances": 178,
-         "attributes": 13,
+         "attributes": 14,
          "missing_values": "false",
-         "remove_attributes": [],
+         "remove_attributes": [1],
          "remove_instances": [],
          "active": "true"
       },
