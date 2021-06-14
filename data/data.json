@@ -1,0 +1,104 @@
+
+{
+   "dataset": [
+
+      {
+         "short_name": "example",
+         "long_name": "Example dataset for application testing",
+         "abstract": "A small random dataset to test the Python application",
+         "in_folder": ".\data\example",
+         "website": "",
+         "instances": 0,
+         "attributes": 0,
+         "missing_values": "false",
+         "remove_attributes": [],
+         "remove_instances": [],
+         "active": "false"
+      },
+
+      {
+         "short_name": "",
+         "long_name": "",
+         "abstract": "",
+         "in_folder": "",
+         "website": "",
+         "instances": 0,
+         "attributes": 0,
+         "missing_values": "false",
+         "remove_attributes": [],
+         "remove_instances": [],
+         "active": "false"
+      },
+
+      {
+         "short_name": "",
+         "long_name": "",
+         "abstract": "",
+         "in_folder": "",
+         "website": "",
+         "instances": 0,
+         "attributes": 0,
+         "missing_values": "false",
+         "remove_attributes": [],
+         "remove_instances": [],
+         "active": "false"
+      },
+
+      {
+         "short_name": "",
+         "long_name": "",
+         "abstract": "",
+         "in_folder": "",
+         "website": "",
+         "instances": 0,
+         "attributes": 0,
+         "missing_values": "false",
+         "remove_attributes": [],
+         "remove_instances": [],
+         "active": "false"
+      },
+
+      {
+         "short_name": "",
+         "long_name": "",
+         "abstract": "",
+         "in_folder": "",
+         "website": "",
+         "instances": 0,
+         "attributes": 0,
+         "missing_values": "false",
+         "remove_attributes": [],
+         "remove_instances": [],
+         "active": "false"
+      },
+
+      {
+         "short_name": "",
+         "long_name": "",
+         "abstract": "",
+         "in_folder": "",
+         "website": "",
+         "instances": 0,
+         "attributes": 0,
+         "missing_values": "false",
+         "remove_attributes": [],
+         "remove_instances": [],
+         "active": "false"
+      },
+
+      {
+         "short_name": "",
+         "long_name": "",
+         "abstract": "",
+         "in_folder": "",
+         "website": "",
+         "instances": 0,
+         "attributes": 0,
+         "missing_values": "false",
+         "remove_attributes": [],
+         "remove_instances": [],
+         "active": "false"
+      },
+
+   ]
+}
