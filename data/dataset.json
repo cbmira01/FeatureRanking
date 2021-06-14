@@ -51,10 +51,10 @@
          "in_folder": "./data/breast",
          "website": "https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic)",
          "instances": 198,
-         "attributes": 34,
+         "attributes": 35,
          "missing_values": "true",
-         "remove_attributes": [],
-         "remove_instances": [],
+         "remove_attributes": [1, 2],
+         "remove_instances": [7, 29, 86, 197],
          "active": "true"
       },
 
