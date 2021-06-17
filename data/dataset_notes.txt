@@ -1,34 +1,38 @@
 
- "short_name": 
-    string, a short, one-word name for the dataset
- "long_name": 
-    string, a longer, more descriptive name of the dataset
- "abstract": 
-    string, a short description of the dataset
- "in_folder": 
-    string, with respect to project root
- "website": 
-    string, public source of data
- "instances": 
-    integer, number of data rows, 1 or greater
- "attributes": 
-    integer, number of data columns, 1 or greater
- "missing_values": 
-    string, "true" or "false"
- "remove_attributes": 
-    integer list, 1-based column numbers to suppress from original data
- "remove_instances": 
-    integer list, 1-based rows to suppress from original data
- "active": 
-    string, "true" or "false"
+Notes on dataset.json:
 
-example: 
-    short name of dataset
-example.data: 
-    comma-separated column values, line-separated rows, original data
-example.names: 
-    JSON list of strings, attribute names
-example.credit: 
-    free text, a statement of academic credit for the dataset
-example.derived: 
-    data derived from original data, after (possibly) supressing rows and columns
+    "short_name": 
+        string, a short, one-word name for the dataset
+    "long_name": 
+        string, a longer, more descriptive name of the dataset
+    "abstract": 
+        string, a short description of the dataset
+    "in_folder": 
+        string, with respect to project root
+    "website": 
+        string, public source of data
+    "instances": 
+        integer, number of data rows, 1 or greater
+    "attributes": 
+        integer, number of data columns, 1 or greater
+    "missing_values": 
+        string, "true" or "false"
+    "remove_attributes": 
+        integer list, 1-based column numbers to suppress from original data
+    "remove_instances": 
+        integer list, 1-based rows to suppress from original data
+    "active": 
+        string, "true" or "false"
+
+Notes on data sub-directories:
+
+    Each sub-directory is named for the short_name of the dataset.
+
+    description_and_notes.txt
+        free text; all information known about the dataset
+    credit.txt
+        free text; a statement of academic credit for the dataset
+    data.csv
+        comma-separated column values, line-separated rows; original UCI data 
+    names.json
+        JSON list of strings; all attribute names
