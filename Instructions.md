@@ -4,10 +4,10 @@
 ### Requirements
 
     - Windows 10
-    - At least OpenCL 1.2 HPC devices, either CPU or GPU, discoverable on your workstation
+    - At least one OpenCL 1.2 device discoverable on your workstation
     - Anaconda 2021.05 or a "recent" version
-    - a Git client, available at the command line
-    - a local directory housing code repositories
+    - Git client, available at the command line
+    - a local directory on your workstation housing your code repositories
 
 ### How to setup
 
@@ -16,22 +16,24 @@
     - Change to your local repository directory:
         cd C:\Users\YourUserName\...\YourLocalRepos>
 
-    - Clone the feature_reduction project GitHub repository:
-        git clone https://github.com/cbmira01/feature_reduction
+    - Clone the FeatureReduction project GitHub repository:
+        git clone https://github.com/cbmira01/FeatureReduction
 
     - Change to the project root directory:
-        cd .\feature_reduction
+        cd .\FeatureReduction
 
     - Create the Conda environment for the project:
         conda env create --file environment.yml
 
-    - After the environment packages have loaded, activate the new environment:
+    - After the environment packages have loaded, activate the new Conda environment:
         conda activate feature_reduction
 
     - To destroy the feature_reduction project and Conda environment:
+		```
         conda deactivate
         conda remove --name feature_reduction --all
-        ...then remove all files in the feature_reduction folder, and the folder itself.
+		```
+        ...then remove the FeatureReduction folder and its contents.
 
 ### How to run
 
