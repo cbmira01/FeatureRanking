@@ -29,15 +29,13 @@
         conda activate feature_reduction
 
     - To destroy the feature_reduction project and Conda environment:
-		```
         conda deactivate
         conda remove --name feature_reduction --all
-		```
         ...then remove the FeatureReduction folder and its contents.
 
 ### How to run
 
-    - Enumerate OpenCL devices residing on your workstation:
+    - Discover OpenCL devices residing on your workstation:
         python discover_devices.py
 
     - Run simple workloads on your OpenCL devices:
@@ -45,5 +43,3 @@
 
     - run the main program:
         python feature_reduction.py
-
-
