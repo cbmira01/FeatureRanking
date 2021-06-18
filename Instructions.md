@@ -1,5 +1,5 @@
 
-## How to install the feature_reduction project
+## How to install and run the FeatureReduction project
 
 ### Requirements
 
