@@ -65,7 +65,9 @@
           pip install C:\Users\YourUserName\Downloads\<wheelname>.whl
     
     - Try the quick test again. If you still see problems, try other pip 
-      wheels as appropriate. 
+      wheels as appropriate. It is also possible that you are experiencing 
+      driver problems, or that you may have no discoverable OpenCL devices
+      on your workstation.
     
 ### After a successful installation
 

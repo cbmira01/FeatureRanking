@@ -1,0 +1,11 @@
+
+    Creative effort in this work not otherwise mentioned is to be considered
+    copyright (c) 2021 Calvin Miracle. You may share, copy, distribute,
+    transmit, remix and adapt this work, with the understanding that you
+    properly attribute this work, and that you not use this work for
+    commercial purposes. If you alter, transform, or build upon this work,
+    you may distribute the resulting work only under the same or similar
+    license to this one.
+
+    Creative Commons Attribution-NonCommercial-ShareAlike 3.0:
+        https://creativecommons.org/licenses/by-nc-sa/3.0/
