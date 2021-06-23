@@ -1,5 +1,7 @@
 
-// Perform an elementwise add on two small arrays
+// OpenCL platfor quick test kernel
+//   Perform an elementwise add on two small arrays
+
 __kernel void add(
     __global const float *first_argument_g, 
     __global const float *second_argument_g, 
