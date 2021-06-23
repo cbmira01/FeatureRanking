@@ -1,5 +1,5 @@
 
-// OpenCL platfor quick test kernel
+// OpenCL platform quick test kernel
 //   Perform an elementwise add on two small arrays
 
 __kernel void add(

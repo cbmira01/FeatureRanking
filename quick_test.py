@@ -48,7 +48,7 @@ for platform in cl.get_platforms():
         # Compile the OpenCL program into an executable kernel
         program = cl.Program(context, kernel_source).build()
 
-        # Marshal Python-hosted data into the device global data area
+        # Marshal Python-hosted data into the device global data areas
         first_argument_g = cl.Buffer(
             context, 
             memory_flags.READ_ONLY | memory_flags.COPY_HOST_PTR, 
@@ -61,7 +61,7 @@ for platform in cl.get_platforms():
         # Designate a portion of the global data area to hold the result of computation
         result_g = cl.Buffer(context, memory_flags.WRITE_ONLY, first_argument_np.nbytes)
 
-        # Call the method of the kernel on global arguments
+        # Call the kernel method on global arguments
         program.add(
             command_queue, 
             first_argument_np.shape, 
