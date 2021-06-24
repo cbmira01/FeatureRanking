@@ -81,7 +81,8 @@ science software, to provide a well-constructed example of OpenCL programming
 hosted in Python, and to learn how to use high-performace resources on my 
 ordinary workstations.
 
-I hope to post some results of these experiments in RESULTS.md.
+Notes on the equations used to develop the feature reduction algorithm are in
+NOTES.md. I hope to post some results of these experiments in RESULTS.md.
 
 ## Credits, attributions, works consulted
 
