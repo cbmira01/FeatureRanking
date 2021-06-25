@@ -1,7 +1,14 @@
 
+#
 # A quick test of the PyOpenCL installation:
 #   - dump information on available platforms and devices
 #   - do a very small workload test on each device
+#
+# This program was built using examples from:
+#   - "Hands On OpenCL" (http://handsonopencl.github.io/)
+#   - Code examples from the PyOpenCL project (https://github.com/inducer/pyopencl)
+#   - pyopencl-in-action (https://github.com/oysstu/pyopencl-in-action)
+#
 
 import pyopencl as cl
 import numpy as np
@@ -11,10 +18,10 @@ print('OpenCL platforms and devices discovered on this workstation...\n')
 
 for platform in cl.get_platforms():
     print('Platform name: ', platform.name.lstrip())
-    
+
     for device in platform.get_devices(cl.device_type.ALL):
         print('    ', 'Device name: ', device.name.lstrip())
-        print('    ', 'Vendor: ', device.vendor.lstrip())    
+        print('    ', 'Vendor: ', device.vendor.lstrip())
         print('    ', 'Version:', device.version)
         print('    ', 'Available? ', bool(device.available))
         print('    ', 'Processor type: ', cl.device_type.to_string(device.type))
@@ -24,7 +31,7 @@ for platform in cl.get_platforms():
         print('    ', 'Compute units: ', device.max_compute_units)
         print('\n')
 
-print('Running small workloads on each device...\n')
+print('Running a small workload on each device...\n')
 
 # Fetch the OpenCL source code to run for this exercise
 with open('./kernels/quick_test.cl', 'r') as f:
@@ -34,46 +41,52 @@ for platform in cl.get_platforms():
     for device in platform.get_devices(cl.device_type.ALL):
         print([device], '\n')
 
-        # Prepare Python-hosted data
-        first_argument_np = np.random.rand(5).astype(np.float32)
-        second_argument_np = np.random.rand(5).astype(np.float32)
-        print(' ', first_argument_np)
-        print('+', second_argument_np)
+        # Prepare Python-hosted arrays
+        array_size = 5
+        first_argument_np = np.random.rand(array_size).astype(np.float32)
+        second_argument_np = np.random.rand(array_size).astype(np.float32)
+        result_np = np.empty(array_size).astype(np.float32)
+
+        print('    ', first_argument_np)
+        print('   +', second_argument_np)
 
         # Prepare the context and command queue for the current device
         context = cl.Context([device])
         command_queue = cl.CommandQueue(context)
         memory_flags = cl.mem_flags
 
-        # Compile the OpenCL program into an executable kernel
+        # Compile the OpenCL program
         program = cl.Program(context, kernel_source).build()
 
-        # Marshal Python-hosted data into the device global data areas
+        # Marshal Python-hosted data into the device global data area
         first_argument_g = cl.Buffer(
-            context, 
-            memory_flags.READ_ONLY | memory_flags.COPY_HOST_PTR, 
+            context,
+            memory_flags.READ_ONLY | memory_flags.COPY_HOST_PTR,
             hostbuf=first_argument_np)
         second_argument_g = cl.Buffer(
-            context, 
-            memory_flags.READ_ONLY | memory_flags.COPY_HOST_PTR, 
+            context,
+            memory_flags.READ_ONLY | memory_flags.COPY_HOST_PTR,
             hostbuf=second_argument_np)
 
-        # Designate a portion of the global data area to hold the result of computation
-        result_g = cl.Buffer(context, memory_flags.WRITE_ONLY, first_argument_np.nbytes)
+        # Designate a portion of the global data area
+        #   to hold the result of computation
+        result_g = cl.Buffer(
+            context,
+            memory_flags.WRITE_ONLY,
+            first_argument_np.nbytes)
 
-        # Call the kernel method on global arguments
+        # Call the kernel on global arguments
         program.add(
-            command_queue, 
-            first_argument_np.shape, 
-            None, 
-            first_argument_g, 
-            second_argument_g, 
+            command_queue,
+            first_argument_np.shape,
+            None,
+            first_argument_g,
+            second_argument_g,
             result_g)
 
-        # Marshal computation results back into Python-hosted area
-        result_np = np.empty_like(first_argument_np)
+        # Marshal computation results into a Python-hosted array
         cl.enqueue_copy(command_queue, result_np, result_g)
 
         # Dump the results
-        print('=', result_np)
+        print('   =', result_np)
         print('\n')
