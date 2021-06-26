@@ -32,7 +32,7 @@ string-metric measures for character data, and better handling of missing data.
 
 ## OpenCL, a high-performance computing framework
 
-[OpenCL] (https://en.wikipedia.org/wiki/OpenCL) is an industry-supported 
+OpenCL (https://en.wikipedia.org/wiki/OpenCL) is an industry-supported 
 framework (API, interfaces, programming language) to make high-performance 
 computing capabilities of CPUS, GPUs, and FPGAs available for data crunching 
 under a unified model. HPC devices residing on a workstation can be discovered, 
@@ -78,8 +78,8 @@ testing, host platform characterization, and running small OpenCL workloads.
 
 The goals of this project are to qualify OpenCL as a suitable platform for data 
 science software, to provide a well-constructed example of OpenCL programming 
-hosted in Python, and to learn how to use high-performace resources on my 
-ordinary workstations.
+hosted in Python, and to learn how to use high-performace resources on ordinary 
+workstations.
 
 Notes on the equations used to develop the feature reduction algorithm are in
 NOTES.md. I hope to post some results of these experiments in RESULTS.md.

@@ -4,13 +4,13 @@
 ### Requirements
 
     - Windows 10 64-bit, with most up-to-date CPU and GPU drivers
-    
+
     - at least one OpenCL device discoverable on your workstation
-    
+
     - Anaconda 2021.05 or a "recent" version
-    
+
     - Git client, available at the Anaconda command line
-    
+
     - a local directory on your workstation housing your code repositories
 
 ### Setup from scratch
@@ -32,9 +32,19 @@
     - After packages have loaded, activate the new Conda environment:
           conda activate feature_reduction
 
+### Return to previously installed project
+
+    - Open the Anaconda CMD prompt into the Conda (base) environment.
+
+    - Change to the FeatureReduction project root directory:
+          cd C:\Users\your-user-name\...\your-local-repos\FeatureReduction
+
+    - Activate the existing Conda environment:
+          conda activate feature_reduction
+
 ### Update environment packages
 
-    - To update environment packages after repository changes, change to the 
+    - To update environment packages after repository changes, change to the
       FeatureReduction project root directory, then:
         git pull
         conda env update --name feature_reduction --file environment.yml
@@ -45,8 +55,8 @@
         conda deactivate
         conda remove --name feature_reduction --all
 
-    - To destroy the FeatureReduction project entirely, first destroy the 
-      feature_reduction environment, then remove the FeatureReduction folder 
+    - To destroy the FeatureReduction project entirely, first destroy the
+      feature_reduction environment, then remove the FeatureReduction folder
       and its contents.
 
 ### Test the installation
@@ -55,35 +65,35 @@
       and run a very small OpenCL workload on each one:
           python quick_test.py
 
-    - The host information program will dump information about your worstation:
+    - The host information program will dump information about your workstation:
           python host_information.py
 
 ### If you have difficulty...
 
     Unfortunately, installing PyOpenCL on Windows is still more an art
-    than a science. If you encounter difficulty running the quick test, 
+    than a science. If you encounter difficulty running the quick test,
     you may need a pip 'wheel' (pre-compiled binary) that supports older
     OpenCL device drivers. Here's how to do it:
-    
-    - Visit http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopencl 
-    
-    - Download a wheel appropriate for your OpenCL driver level, vendor 
+
+    - Visit http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopencl
+
+    - Download a wheel appropriate for your OpenCL driver level, vendor
       type, and Python version. For example, for the most recent version
       of PyOpenCL, Python 3.9, and OpenCL driver level 1.2, try one of
       the following wheels:
           pyopencl-2021.2.2+cl12-cp39-cp39-win_amd64.whl
           pyopencl-2021.2.2+cl12-cp39-cp39-win32.whl
-        
+
     - Install the wheel. This action will replace the Conda package version
       of PyOpenCL. Make sure the feature_reduction environment is still
       activated, and that you are positioned in FeatureReduction project root:
           pip install C:\Users\your-user-name\...\Downloads\<wheel-name>.whl
-    
-    - Try the quick test again. If you still see problems, try other pip 
-      wheels as appropriate. It is also possible that you are experiencing 
+
+    - Try the quick test again. If you still see problems, try other pip
+      wheels as appropriate. It is also possible that you are experiencing
       driver problems, or that you may have no discoverable OpenCL devices
       on your workstation.
-    
+
 ### After a successful installation
 
     - Run simple workloads on your OpenCL devices:
