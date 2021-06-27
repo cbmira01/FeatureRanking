@@ -1,0 +1,12 @@
+
+Simple dataset to help write tests.
+
+11 observations, six features
+
+    Feature_one: float; random
+    Feature_two: float; random
+    Feature_three: float; random
+    Feature_four: float; 2 * Feature_two
+    Feature_five: float; 3 * Feature_three + 2
+    Feature_six: float; all zeros
+    

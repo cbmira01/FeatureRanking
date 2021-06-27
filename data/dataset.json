@@ -8,12 +8,12 @@
          "abstract": "A small random dataset to test the Python application",
          "in_folder": "./data/example",
          "website": "",
-         "instances": 0,
-         "attributes": 0,
+         "instances": 11,
+         "attributes": 6,
          "missing_values": "false",
-         "remove_attributes": [],
-         "remove_instances": [],
-         "active": "false"
+         "remove_attributes": [6],
+         "remove_instances": [11],
+         "active": "true"
       },
 
       {
