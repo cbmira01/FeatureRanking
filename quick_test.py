@@ -13,6 +13,14 @@
 import pyopencl as cl
 import numpy as np
 
+devtype_readable = { 
+    "1": "DEFAULT",
+    "2": "CPU",
+    "4": "GPU",
+    "8": "ACCELERATOR",
+    "16": "CUSTOM",
+    }
+
 print('\n')
 print('OpenCL platforms and devices discovered on this workstation...\n')
 
@@ -24,7 +32,8 @@ for platform in cl.get_platforms():
         print('    ', 'Vendor: ', device.vendor.lstrip())
         print('    ', 'Version:', device.version)
         print('    ', 'Available? ', bool(device.available))
-        print('    ', 'Processor type: ', cl.device_type.to_string(device.type))
+        print('    ', 'Processor type: ', 
+            devtype_readable.get(str(device.type), "Unknown..."))
         print('    ', 'Local memory: ', device.local_mem_size)
         print('    ', 'Global memory: ', device.global_mem_size)
         print('    ', 'Work group size: ', device.max_work_group_size)
