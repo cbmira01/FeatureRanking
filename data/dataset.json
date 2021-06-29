@@ -7,13 +7,13 @@
          "long_name": "Example dataset for application testing",
          "abstract": "A small random dataset to test the Python application",
          "in_folder": "./data/example",
-         "website": "",
-         "instances": 11,
-         "attributes": 6,
+         "website": "https://github.com/cbmira01/FeatureReduction",
+         "instances": 12,
+         "attributes": 8,
          "missing_values": "false",
-         "remove_attributes": [6],
-         "remove_instances": [11],
-         "active": "true"
+         "remove_attributes": [6, 7, 8],
+         "remove_instances": [11, 12],
+         "active": "false"
       },
 
       {
