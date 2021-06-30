@@ -61,12 +61,16 @@
 
 ### Test the installation
 
+    - To run the python programs, change to the .\src folder:
+        cd .\src
+
     - The quick test program will dump a list of available OpenCL devices,
       and run a very small OpenCL workload on each one:
           python quick_test.py
 
     - The host information program will dump information about your workstation:
-          python host_information.py
+          python host_info_full.py
+          python host_info_brief.py
 
 ### If you have difficulty...
 
@@ -77,10 +81,9 @@
 
     - Visit http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopencl
 
-    - Download a wheel appropriate for your OpenCL driver level, vendor
-      type, and Python version. For example, for the most recent version
-      of PyOpenCL, Python 3.9, and OpenCL driver level 1.2, try one of
-      the following wheels:
+    - Download a wheel appropriate for your OpenCL version, vendor type, and 
+      Python version. For example, for PyOpenCL 2021.2.2, Python 3.9, and OpenCL 
+      version 1.2, try one of the following wheels:
           pyopencl-2021.2.2+cl12-cp39-cp39-win_amd64.whl
           pyopencl-2021.2.2+cl12-cp39-cp39-win32.whl
 
