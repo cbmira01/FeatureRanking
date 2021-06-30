@@ -8,7 +8,7 @@ compared to an unaccelerated version.
 
 ## How to run this project
 
-Requirements, setup and run instructions are described in INSTRUCTIONS.md.
+Requirements, setup and run instructions are described in doc\INSTRUCTIONS.md.
 
 ## Feature reduction, an early goal for data exploration
 
@@ -61,8 +61,7 @@ This project will:
       This code will run on the machine's CPU as an unaccelerated workload.
 
     - Implement the entropy measure algorithm again in the OpenCL dialect.
-      This code will run on discoverable HPC devices as a parallel computation 
-      workload.
+      This code will run on discoverable HPC devices as a parallel computation. 
 
     - Run the NumPy and OpenCL implementations against each other on realistic 
       machine learning datasets. It is possible to add more datasets.
@@ -82,11 +81,11 @@ hosted in Python, and to learn how to use high-performace resources on ordinary
 workstations.
 
 Notes on the equations used to develop the feature reduction algorithm are in
-NOTES.md. I hope to post some results of these experiments in RESULTS.md.
+doc\NOTES.md. I hope to post some results of these experiments in doc\RESULTS.md.
 
 ## Credits, attributions, works consulted
 
-Credits, attributions, and works consulted are summarized in CREDITS.md.
+Credits, attributions, and works consulted are summarized in doc\CREDITS.md.
 
 ## Notes for project grading
 
