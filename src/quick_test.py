@@ -40,7 +40,9 @@ for platform in cl.get_platforms():
         print('    ', 'Compute units: ', device.max_compute_units)
         print('\n')
 
-print('Running a small workload on each device...\n')
+
+array_size = 500000
+print(f'Running a small workload on each device, array size {array_size}\n')
 
 # Fetch the OpenCL source code to run for this exercise
 with open('./kernels/quick_test.cl', 'r') as f:
@@ -51,7 +53,6 @@ for platform in cl.get_platforms():
         print([device], '\n')
 
         # Prepare Python-hosted arrays
-        array_size = 500000
         first_argument_np = np.random.rand(array_size).astype(np.float32)
         second_argument_np = np.random.rand(array_size).astype(np.float32)
         result_np = np.empty(array_size).astype(np.float32)
