@@ -31,7 +31,8 @@ for platform in cl.get_platforms():
         print('    ', 'Device name: ', device.name.lstrip())
         print('    ', 'Vendor: ', device.vendor.lstrip())
         print('    ', 'Version:', device.version)
-        print('    ', 'Available? ', bool(device.available))
+        print('    ', 'Device available? ', bool(device.available))
+        print('    ', 'Compiler available? ', bool(device.compiler_available))
         print('    ', 'Processor type: ', 
             devtype_readable.get(str(device.type), "Unknown..."))
         print('    ', 'Local memory: ', device.local_mem_size)
@@ -41,8 +42,13 @@ for platform in cl.get_platforms():
         print('\n')
 
 
+# Prepare Python-hosted arrays
 array_size = 500000
-print(f'Running a small workload on each device, array size {array_size}\n')
+first_argument_np = np.random.rand(array_size).astype(np.float32)
+second_argument_np = np.random.rand(array_size).astype(np.float32)
+result_np = np.empty(array_size).astype(np.float32)
+
+print(f'Running a small workload on each device; array size {array_size}\n')
 
 # Fetch the OpenCL source code to run for this exercise
 with open('./kernels/quick_test.cl', 'r') as f:
@@ -51,12 +57,6 @@ with open('./kernels/quick_test.cl', 'r') as f:
 for platform in cl.get_platforms():
     for device in platform.get_devices(cl.device_type.ALL):
         print([device], '\n')
-
-        # Prepare Python-hosted arrays
-        first_argument_np = np.random.rand(array_size).astype(np.float32)
-        second_argument_np = np.random.rand(array_size).astype(np.float32)
-        result_np = np.empty(array_size).astype(np.float32)
-
         print('    ', first_argument_np)
         print('   +', second_argument_np)
 
