@@ -74,10 +74,10 @@
 
 ### If you have difficulty...
 
-    Unfortunately, installing PyOpenCL on Windows is still more an art
-    than a science. If you encounter difficulty running the quick test,
-    you may need a pip 'wheel' (pre-compiled binary) that supports older
-    OpenCL device drivers. Here's how to do it:
+    Unfortunately, installing PyOpenCL on Windows is still more an art than a 
+    science. If you encounter difficulty running the quick test, you may need a 
+    pip 'wheel' (pre-compiled binary) that supports older OpenCL device drivers. 
+    Here's how to do it...
 
     - Visit http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopencl
 
@@ -92,10 +92,16 @@
       activated, and that you are positioned in FeatureReduction project root:
           pip install C:\Users\your-user-name\...\Downloads\<wheel-name>.whl
 
-    - Try the quick test again. If you still see problems, try other pip
-      wheels as appropriate. It is also possible that you are experiencing
-      driver problems, or that you may have no discoverable OpenCL devices
-      on your workstation.
+    - Try the quick test again. If you still see problems, try other pip wheels 
+      as appropriate. It is also possible that you are experiencing driver 
+      problems, or that you may have no discoverable OpenCL devices on your 
+      workstation.
+
+    - I have found the "AMD Accelerated Parallel Processing SDK" (AMD APP SDK)
+      can allow Intel CPUs to be recognized as OpenCL devices. This may be worth
+      investigating if your workstation does not have a GPU. See these links:
+          https://en.wikipedia.org/wiki/AMD_APP_SDK
+          https://github.com/fireice-uk/xmr-stak/issues/1511
 
 ### After a successful installation
 
