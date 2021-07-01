@@ -39,6 +39,7 @@ for platform in cl.get_platforms():
         print('    ', 'Global memory: ', device.global_mem_size)
         print('    ', 'Work group size: ', device.max_work_group_size)
         print('    ', 'Compute units: ', device.max_compute_units)
+        print('    ', 'Max work item dimensions: ', device.max_work_item_dimensions)
         print('\n')
 
 
