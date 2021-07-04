@@ -1,5 +1,5 @@
 
-Notes on dataset.json:
+Notes on datasets.json:
 
     "short_name": 
         string, a short, one-word name for the dataset
