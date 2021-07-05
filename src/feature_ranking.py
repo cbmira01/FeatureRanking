@@ -26,7 +26,7 @@ def run_trial():
     return None
 
 def exit_program():
-    print('\nThank you for using feature reduction...')
+    print('\nThank you for using feature ranking...')
     sys.exit()
     return None
 
@@ -51,7 +51,7 @@ while True:
     print('')
     print('1. List available datasets')
     print('2. List datasets with credits')
-    print('3. Run feature reduction trial on a dataset')
+    print('3. Run feature ranking trial on a dataset')
     print('4. Exit')
     print('')
     choice = input('Choice? ')
