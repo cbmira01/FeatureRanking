@@ -1,12 +1,14 @@
 
-Simple dataset to help write tests.
+Simple dataset to help test the project
 
-11 observations, six features
+12 observations, eight features
 
-    Feature_one: float; random
-    Feature_two: float; random
-    Feature_three: float; random
-    Feature_four: float; 2 * Feature_two
-    Feature_five: float; 3 * Feature_three + 2
-    Feature_six: float; all zeros
+    C1: float; random
+    C2: float; random
+    C3: float; random
+    C4: float; 2 * C2
+    C5: float; 3 * C3 + 2
+    C6: float; all 0.0
+    C7: float; all 1.0
+    C8: float; all 2.0
     

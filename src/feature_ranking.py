@@ -41,8 +41,10 @@ def switch_on(c):
 
 
 # Discover all the available datasets
-with open('../data/datasets.json', 'r') as f:
-    datasets = json.load(f)
+with open('../data/datasets.json', 'r') as file:
+    datasets = json.load(file)
+
+# next((ds for ds in datasets['datasets'] if ds['short_name'] == 'example'), None)
 
 # Main command loop
 while True:

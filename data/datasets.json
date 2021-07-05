@@ -7,7 +7,7 @@
          "long_name": "Example dataset for application testing",
          "abstract": "A small random dataset to test the Python application",
          "in_folder": "./data/example",
-         "website": "https://github.com/cbmira01/FeatureReduction",
+         "website": "https://github.com/cbmira01/FeatureRanking",
          "instances": 12,
          "attributes": 8,
          "missing_values": "false",
