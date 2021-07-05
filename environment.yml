@@ -1,4 +1,4 @@
-name: feature_reduction
+name: feature_ranking
 channels:
   - conda-forge
   - defaults

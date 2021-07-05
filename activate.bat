@@ -1,3 +1,3 @@
 
 @echo off
-conda activate feature_reduction
+conda activate feature_ranking

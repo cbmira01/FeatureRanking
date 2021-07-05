@@ -1,3 +1,3 @@
 
 @echo on
-conda env update --name feature_reduction --file environment.yml
+conda env update --name feature_ranking --file environment.yml
