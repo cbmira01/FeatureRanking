@@ -1,5 +1,5 @@
 
-## How to install and run the FeatureReduction project
+## How to install and run the FeatureRanking project
 
 ### Requirements
 
@@ -20,43 +20,43 @@
     - Change to your preferred local repository base directory:
           cd C:\Users\your-user-name\...\your-local-repos>
 
-    - Clone the FeatureReduction project GitHub repository:
-          git clone https://github.com/cbmira01/FeatureReduction
+    - Clone the FeatureRanking project GitHub repository:
+          git clone https://github.com/cbmira01/FeatureRanking
 
-    - Change to the FeatureReduction project root directory:
-          cd .\FeatureReduction
+    - Change to the FeatureRanking project root directory:
+          cd .\FeatureRanking
 
     - Create the Conda environment for the project:
           conda env create --file environment.yml
 
     - After packages have loaded, activate the new Conda environment:
-          conda activate feature_reduction
+          conda activate feature_ranking
 
 ### Return to previously installed project
 
     - Open the Anaconda CMD prompt into the Conda (base) environment.
 
-    - Change to the FeatureReduction project root directory:
-          cd C:\Users\your-user-name\...\your-local-repos\FeatureReduction
+    - Change to the FeatureRanking project root directory:
+          cd C:\Users\your-user-name\...\your-local-repos\FeatureRanking
 
     - Activate the existing Conda environment:
-          conda activate feature_reduction
+          conda activate feature_ranking
 
 ### Update environment packages
 
     - To update environment packages after repository changes, change to the
-      FeatureReduction project root directory, then:
+      FeatureRanking project root directory, then:
         git pull
-        conda env update --name feature_reduction --file environment.yml
+        conda env update --name feature_ranking --file environment.yml
 
 ### Destroy the environment and project
 
-    - To destroy the feature_reduction Conda environment:
+    - To destroy the feature_ranking Conda environment:
         conda deactivate
-        conda remove --name feature_reduction --all
+        conda remove --name feature_ranking --all
 
-    - To destroy the FeatureReduction project entirely, first destroy the
-      feature_reduction environment, then remove the FeatureReduction folder
+    - To destroy the FeatureRanking project entirely, first destroy the
+      feature_ranking environment, then remove the FeatureRanking folder
       and its contents.
 
 ### Test the installation
@@ -88,8 +88,8 @@
           pyopencl-2021.2.2+cl12-cp39-cp39-win32.whl
 
     - Install the wheel. This action will replace the Conda package version
-      of PyOpenCL. Make sure the feature_reduction environment is still
-      activated, and that you are positioned in FeatureReduction project root:
+      of PyOpenCL. Make sure the feature_ranking environment is still
+      activated, and that you are positioned in FeatureRanking project root:
           pip install C:\Users\your-user-name\...\Downloads\<wheel-name>.whl
 
     - Try the quick test again. If you still see problems, try other pip wheels 
@@ -98,15 +98,13 @@
       workstation.
 
     - I have found the "AMD Accelerated Parallel Processing SDK" (AMD APP SDK)
-      can allow Intel CPUs to be recognized as OpenCL devices. This may be worth
-      investigating if your workstation does not have a GPU. See these links:
+      can allow an Intel CPU to be recognized as an OpenCL devices. This may be 
+      worth investigating if your workstation does not have a GPU. 
+      See these links:
           https://en.wikipedia.org/wiki/AMD_APP_SDK
           https://github.com/fireice-uk/xmr-stak/issues/1511
 
 ### After a successful installation
 
-    - Run simple workloads on your OpenCL devices:
-          python simple_workloads.py
-
     - run the main program:
-          python feature_reduction.py
+          python feature_ranking.py
