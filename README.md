@@ -9,7 +9,7 @@ compared to an unaccelerated version.
 ## How to run this project
 
 Requirements, setup and run instructions are described in 
-<p style="text-align: center;"> ./doc/INSTRUCTIONS.md </p> 
+<center> ./doc/INSTRUCTIONS.md </center> 
 
 ## Feature reduction, an early goal for data exploration
 
