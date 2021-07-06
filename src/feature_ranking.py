@@ -32,10 +32,10 @@ def run_a_trial():
         print(ds['short_name'], '  ', end='')
 
     ds_name = input('\n\nPlease chose a dataset name: ').lower()
-    ds_chosen = next((d for d in datasets_list if d['short_name'] == ds_name), None)
+    ds_info = next((d for d in datasets_list if d['short_name'] == ds_name), None)
 
-    if ds_chosen is not None:
-        trial.run_and_log_trial(ds_chosen)
+    if ds_info is not None:
+        trial.run_and_log_trial(ds_info)
 
     return None
 
