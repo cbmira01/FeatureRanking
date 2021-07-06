@@ -1,13 +1,13 @@
 
 import sys
-import trial_run as trial
-import prep_data as prep
+from trial_run import *
+from prep_data import discover_datasets
 
 
 def list_datasets():
-    print('\n')
+    print('\nDatasets to choose from...\n')
     for ds in datasets_list:
-        print('{}{}'.format(ds['short_name'].ljust(10), ds['long_name']))
+        print('    {}{}'.format(ds['short_name'].ljust(10), ds['long_name']))
     return None
 
 
@@ -56,12 +56,12 @@ def switch_on(c):
     return switcher.get(c, lambda: 'Invalid')()
 
 
-datasets_list = prep.discover_datasets()
+datasets_list = discover_datasets()
 
 # Main command loop
 while True:
     print('\n')
-    print('FEATURE RANKINGS main menu')
+    print('FEATURE RANKING main menu')
     print()
     print('list ---- List available datasets')
     print('credits - List datasets with credits')
