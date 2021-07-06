@@ -18,10 +18,25 @@ def list_datasets_with_credits():
         with open(credits_file) as file:
             credit_text = file.read()
 
-        print('\n=======================================================')
+        print('\n========================================================')
         print('{}{}'.format(short_name.ljust(10), ds['long_name']), end='')
         print('\n', ds['abstract'])
         print('\n', credit_text)
+    return None
+
+
+def describe_datasets():
+    for ds in datasets_list:
+        short_name = ds['short_name']
+        print('\n========================================================')
+        print('{}{}'.format(short_name.ljust(10), ds['long_name']))
+        print('    abstract: ', ds['abstract'])
+        print('    website: ', ds['website'])
+        print('    instances: ', ds['instances'])
+        print('    attributes: ', ds['attributes'])
+        print('    remove_attributes: ', ds['remove_attributes'])
+        print('    remove_instances: ', ds['remove_instances'])
+
     return None
 
 
@@ -49,6 +64,7 @@ def exit_program():
 def switch_on(c):
     switcher = {
         'list': list_datasets,
+        'describe': describe_datasets,
         'credits': list_datasets_with_credits,
         'trial': run_a_trial,
         'exit': exit_program
@@ -63,10 +79,11 @@ while True:
     print('\n')
     print('FEATURE RANKING main menu')
     print()
-    print('list ---- List available datasets')
-    print('credits - List datasets with credits')
-    print('trial --- Run feature ranking trial on a dataset')
-    print('exit ---- Exit')
+    print('list ------ List available datasets')
+    print('describe -- Describe available datasets')
+    print('credits --- List datasets with credits')
+    print('trial ----- Run feature ranking trial on a dataset')
+    print('exit ------ Exit')
     print()
-    choice = input('Choice? ').lower()
-    switch_on(choice)
+
+    switch_on(input('Choice? ').lower())
