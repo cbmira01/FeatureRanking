@@ -1,7 +1,7 @@
 
 import sys
 from trial_run import *
-from prep_data import discover_datasets
+from prep_data import *
 
 
 def list_datasets():
@@ -50,7 +50,7 @@ def run_a_trial():
     ds_info = next((d for d in datasets_list if d['short_name'] == ds_name), None)
 
     if ds_info is not None:
-        trial.run_and_log_trial(ds_info)
+        run_and_log_trial(ds_info)
 
     return None
 
