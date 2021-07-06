@@ -3,10 +3,10 @@
 # Dataset operations
 #
 
-import numpy as np
 import csv
 import pprint
 import json
+import sys
 
 
 def discover_datasets():
@@ -15,54 +15,72 @@ def discover_datasets():
     return datasets_dict['datasets']
 
 
-def get_clean_data(dataset_info):
-    # retrieve data
-    # drop rows
-    # drop columns
-    # convert to float
+def get_clean_data(dataset_info, dump=False):
+    dataset_csv = get_raw_data(dataset_info)
+
+    dataset_csv = drop_rows_and_columns(
+        dataset_csv, 
+        dataset_info['remove_instances'],
+        dataset_info['remove_attributes'])
+
+    dataset = [[float(col) for col in row] for row in dataset_csv]
+
+    if (dump):
+        dump_dataset(dataset)
+
     return dataset
 
+def get_raw_data(dataset_info, dump=False):
+    short_name = dataset_info['short_name']
 
-def get_raw_data(dataset_info):
+    with open('../data/' + short_name + '/data.csv', newline='') as file:
+        reader = csv.reader(file, delimiter=',')
+        dataset_csv = []
+        for row in reader:
+            dataset_csv.append(row[:])
+
+    if (dump):
+        dump_dataset(dataset_csv)
+
     return dataset_csv
 
-def drop_rows(dataset_csv, rows):
+
+def drop_rows_and_columns(dataset_csv, rows, cols):
+
+    for row in sort_and_zero_base(rows):
+        del(dataset_csv[row])
+        print('r', end='')
+
+    for col in sort_and_zero_base(cols):
+        print('c', end='')
+        for row in range(0, len(dataset_csv)):
+            del(dataset_csv[row][col])
+
     return dataset_csv
 
 
-def drop_columns(dataset_csv, cols):
-    return dataset_csv
+def sort_and_zero_base(list):
+    list.sort(reverse=True)
+    return [x-1 for x in list]
 
 
-def convert_to_float(dataset_csv):
-    return dataset
-
-
-def dump_clean_dataset(dataset):
-    return None
-
-
-def dump_raw_dataset(dataset_csv):
+def dump_dataset(dataset):
+    print('\n')
+    pp = pprint.PrettyPrinter(width=150, compact=True)
+    pp.pprint(dataset)
     return None
 
 
 if __name__ == '__main__':
-    num_rows = 12
-    drop_rows = [10, 11]
-    num_columns = 8
-    drop_columns = [5, 6, 7]
 
-    with open('../data/example/data.csv', newline='') as csvfile:
-        reader = csv.reader(csvfile, delimiter=',')
-        # dataset = list(reader)
-        dataset_str = []
-        for row in reader:
-            dataset_str.append(row[:])
+    datasets_list = discover_datasets()
 
-    pp = pprint.PrettyPrinter(width=100, compact=True)
+    for ds in datasets_list:
+        print(ds['short_name'], '  ', end='')
 
-    pp.pprint(dataset_str)
-    print('\n')
+    ds_name = input('\n\nDump a dataset: ').lower()
+    ds_info = next((d for d in datasets_list if d['short_name'] == ds_name), None)
 
-    dataset = [[float(col) for col in row] for row in dataset_str]
-    pp.pprint(dataset)
+    if ds_info is not None:
+        dataset_csv = get_raw_data(ds_info, dump=True)
+        dataset = get_clean_data(ds_info, dump=True)

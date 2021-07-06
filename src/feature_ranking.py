@@ -1,4 +1,9 @@
 
+#
+# This is the main program of the Feature Ranking pr rf5oject.
+# It alows the user to list the datasets and choose one for a trial run.
+#
+
 import sys
 from trial_run import *
 from prep_data import *
