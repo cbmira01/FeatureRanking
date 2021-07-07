@@ -4,7 +4,6 @@
 #
 
 import csv
-import pprint
 import json
 import sys
 
@@ -46,13 +45,14 @@ def get_raw_data(dataset_info, dump=False):
 
 
 def drop_rows_and_columns(dataset_csv, rows, cols):
+    print('   Dropped: ', end='')
 
     for row in sort_and_zero_base(rows):
         del(dataset_csv[row])
-        print('r', end='')
+        print('r', row, ' ', end='')
 
     for col in sort_and_zero_base(cols):
-        print('c', end='')
+        print('c', col, ' ', end='')
         for row in range(0, len(dataset_csv)):
             del(dataset_csv[row][col])
 
@@ -66,8 +66,10 @@ def sort_and_zero_base(list):
 
 def dump_dataset(dataset):
     print('\n')
-    pp = pprint.PrettyPrinter(width=150, compact=True)
-    pp.pprint(dataset)
+
+    for row in range(0, len(dataset)):
+        print(dataset[row])
+
     return None
 
 
@@ -75,6 +77,7 @@ if __name__ == '__main__':
 
     datasets_list = discover_datasets()
 
+    print('\n')
     for ds in datasets_list:
         print(ds['short_name'], '  ', end='')
 
