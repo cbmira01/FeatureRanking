@@ -44,12 +44,12 @@ for platform in cl.get_platforms():
 
 
 # Prepare Python-hosted arrays
-array_size = 500000
+array_size = 1000000
 first_argument_np = np.random.rand(array_size).astype(np.float32)
 second_argument_np = np.random.rand(array_size).astype(np.float32)
 result_np = np.empty(array_size).astype(np.float32)
 
-print(f'Running a small workload on each device; array size {array_size}\n')
+print(f'Running a small workload on each device; {array_size} multiplies \n')
 
 # Fetch the OpenCL source code to run for this exercise
 with open('./kernels/quick_test.cl', 'r') as f:
@@ -59,7 +59,7 @@ for platform in cl.get_platforms():
     for device in platform.get_devices(cl.device_type.ALL):
         print([device], '\n')
         print('    ', first_argument_np)
-        print('   +', second_argument_np)
+        print('   *', second_argument_np)
 
         # Prepare the context and command queue for the current device
         context = cl.Context([device])
