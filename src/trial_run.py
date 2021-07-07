@@ -13,14 +13,17 @@
 #
 
 import sys
+from prep_data import *
 
 def run_and_log_trial(dataset_info):
     print('Run and log a trial')
     print(dataset_info)
-    results = get_prepared_data()
-    results = dispatch_unaccelerated_fr()
-    results = dispatch_opencl_fr()
-    log_a_report()
+    results = []
+
+    results.append(dispatch_unaccelerated_fr(dataset_info))
+    results.append(dispatch_opencl_fr(dataset_info))
+
+    log_a_report(results)
     return None
 
 
@@ -28,15 +31,19 @@ def get_prepared_data():
     return None
     
     
-def dispatch_unaccelerated_fr():
+def dispatch_unaccelerated_fr(dataset_info):
+    print('dispatch unaccel')
+    print(dataset_info)
     return None
     
     
-def dispatch_opencl_fr():
+def dispatch_opencl_fr(dataset_info):
+    print('dispatch opencl')
+    print(dataset_info)
     return None
     
     
-def log_a_report():
+def log_a_report(results):
     # needs date-time info
     # needs host platform info
     return None
@@ -47,4 +54,27 @@ def get_dataset_info_from_name(dataset_name):
 
 
 if __name__ == '__main__':
-    sys.exit()
+
+    print('\nCheck trials on console...')
+
+    datasets_list = discover_datasets()
+
+    while True:
+        print('\n')
+        for ds in datasets_list:
+            print(ds['short_name'], '  ', end='')
+
+        ds_name = input('\n\nChoose a dataset: ').lower()
+        ds_info = next((d for d in datasets_list if d['short_name'] == ds_name), None)
+
+        trial_choice = input('Workload is \'unaccel\' or \'opencl\': ').lower()
+
+        if trial_choice == 'unaccel' and ds_info is not None:
+            dispatch_unaccelerated_fr(ds_info)
+
+        elif trial_choice == 'opencl' and ds_info is not None:
+            dispatch_opencl_fr(ds_info)
+
+        else:
+            break
+    

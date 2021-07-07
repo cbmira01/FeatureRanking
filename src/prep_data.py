@@ -75,9 +75,9 @@ def dump_dataset(dataset):
 
 if __name__ == '__main__':
 
-    datasets_list = discover_datasets()
+    print('\nCheck datasets on console...\n')
 
-    print('\n')
+    datasets_list = discover_datasets()
     for ds in datasets_list:
         print(ds['short_name'], '  ', end='')
 
