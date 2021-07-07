@@ -45,14 +45,14 @@ def get_raw_data(dataset_info, dump=False):
 
 
 def drop_rows_and_columns(dataset_csv, rows, cols):
-    print('   Dropped: ', end='')
+    # print('   Dropped: ', end='')
 
     for row in sort_and_zero_base(rows):
         del(dataset_csv[row])
-        print('r', row, ' ', end='')
+        # print('r', row, ' ', end='')
 
     for col in sort_and_zero_base(cols):
-        print('c', col, ' ', end='')
+        # print('c', col, ' ', end='')
         for row in range(0, len(dataset_csv)):
             del(dataset_csv[row][col])
 
