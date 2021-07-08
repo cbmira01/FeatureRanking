@@ -1,7 +1,7 @@
 
 Simple dataset to help test the project
 
-12 observations, eight features
+12 observations, 8 features
 
     C1: float; random
     C2: float; random

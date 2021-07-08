@@ -3,6 +3,20 @@
    "datasets": [
 
       {
+         "short_name": "simple",
+         "long_name": "Very simple dataset",
+         "abstract": "A very small dataset to check arithmetic",
+         "in_folder": "./data/simple",
+         "website": "https://github.com/cbmira01/FeatureRanking",
+         "instances": 3,
+         "attributes": 3,
+         "missing_values": "false",
+         "remove_attributes": [],
+         "remove_instances": [],
+         "active": "false"
+      },
+
+      {
          "short_name": "example",
          "long_name": "Example dataset for application testing",
          "abstract": "A small random dataset to test the Python application",

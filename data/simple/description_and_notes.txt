@@ -1,0 +1,4 @@
+
+Simple dataset to help test the project
+
+3 observations, 3 features
