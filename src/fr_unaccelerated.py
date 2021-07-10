@@ -21,11 +21,19 @@ def get_entropy(dataset):
     features = len(dataset[0])
     instances = len(dataset)
 
-    max_values = [max(r) for r in [list(x) for x in zip(*dataset)]]
-    min_values = [min(r) for r in [list(x) for x in zip(*dataset)]]
+    max_values = [max(r) for r in [list(d) for d in zip(*dataset)]]
+    min_values = [min(r) for r in [list(d) for d in zip(*dataset)]]
 
-    diff_ds = [np.subtract(dataset[i], dataset[j]) for i in range(instances-1) for j in range(i+1, instances)]
-    diff_values = [np.subtract(max_values[k], min_values[k]) for k in range(features)]
+    diff_ds = [
+    np.subtract(dataset[i], dataset[j])
+    for i in range(instances-1)
+    for j in range(i+1, instances)
+    ]
+
+    diff_values = [
+    np.subtract(max_values[k], min_values[k])
+    for k in range(features)
+    ]
 
     normalize = np.divide(diff_ds, diff_values)
     squares = np.square(normalize)
@@ -36,16 +44,14 @@ def get_entropy(dataset):
     alpha = np.divide(-np.log(0.5), average_distance)
 
     sims = np.exp(np.multiply(-alpha, distances))
-    log_sims = np.log10(sims)
+    sims = [i for i in sims if i not in [1.0]]
     dissims = np.subtract(1, sims)
-    log_dissims = np.log10(dissims)
-    
-    print('\n', *sims)
 
-    entropy_pairwise = np.add(np.multiply(sims, log_sims), np.multiply(dissims, log_dissims))
+    entropy_pairwise = np.add(np.multiply(sims, np.log10(sims)), np.multiply(dissims, np.log10(dissims)))
     entropy_total = - np.sum(entropy_pairwise)
 
     return None
+
 
 if __name__ == '__main__':
 
