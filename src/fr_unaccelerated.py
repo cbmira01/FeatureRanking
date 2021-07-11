@@ -24,26 +24,24 @@ def get_entropy(dataset):
     max_values = [max(r) for r in [list(d) for d in zip(*dataset)]]
     min_values = [min(r) for r in [list(d) for d in zip(*dataset)]]
 
-    diff_ds = [
+    sample_differences = [
     np.subtract(dataset[i], dataset[j])
     for i in range(instances-1)
     for j in range(i+1, instances)
     ]
 
-    diff_values = [
+    value_ranges = [
     np.subtract(max_values[k], min_values[k])
     for k in range(features)
     ]
 
-    normalize = np.divide(diff_ds, diff_values)
-    squares = np.square(normalize)
-    sum_sq = [np.sum(s) for s in squares]
-    distances = np.sqrt(sum_sq)
+    squares = np.square(np.divide(sample_differences, value_ranges))
+    sample_distances = np.sqrt([np.sum(s) for s in squares])
 
-    average_distance = np.average(distances)
+    average_distance = np.average(sample_distances)
     alpha = np.divide(-np.log(0.5), average_distance)
 
-    sims = np.exp(np.multiply(-alpha, distances))
+    sims = np.exp(np.multiply(-alpha, sample_distances))
     sims = [i for i in sims if i not in [1.0]]
     dissims = np.subtract(1, sims)
 
