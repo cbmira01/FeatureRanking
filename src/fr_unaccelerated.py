@@ -8,17 +8,6 @@ import sys
 from prep_data import *
 
 
-def entry(dataset_info):
-    print(dataset_info)
-    dataset = get_clean_data(dataset_info, dump=False)
-
-    get_entropy(dataset)
-    
-    # 
-    
-    return None
-    
-
 def ranking_protocol(dataset_info):
     print(dataset_info)
     dataset = get_clean_data(dataset_info, dump=False)
@@ -29,54 +18,43 @@ def ranking_protocol(dataset_info):
     # exclude = [width of features, all elements False]
     
     while True:
-        # Step 2: Find the total entropy of the remaing dataset.
+        # Step 2: Find the total entropy of the remaing dataset, and the 
+        #   feature entropies of each non-excluded feature.
         # dataset = masked(dataset, exlude)
-        # total_entropy = get_dataset_entropy(dataset)
-        
-        # Step 3: Find the feature entropy of each non-excluded feature.
-        # feature_entropies = get_feature_entropies(dataset)
+        # feature_entropies, total_entropy = get_all_entropies(dataset, exlude)
     
-        # Step 4: Find the feature fk such that the difference between the
+        # Step 3: Find the feature fk such that the difference between the
         #   total entropy and feature entropy for fk is minimum.
         # entropy_difference = min(np.abs(np.subtract(total_entropy, feature_entropies)))
         #       need feature index
     
-        # Step 5: Exclude feature fk from the dataset and record it as the 
+        # Step 4: Exclude feature fk from the dataset and record it as the 
         #   "least contributing" feature. 
         # exclude[fk] = True
         # print(column name of fk)
     
-        # Step 6: Repeat steps 2–4 until there is only one feature in F.
+        # Step 5: Repeat steps 2–4 until there is only one feature in F.
         # if (there is only one unexcluded feature in exclude):
         break
 
-    # Step 7: Report the last remaining feature is the "most contributing" feature.
+    # Step 6: Report the last remaining feature is the "most contributing" feature.
     # print(that last remaining fk)
     
     return None
     
     
+def get_all_entropies(dataset)    
     
-def get_dataset_entropy(dataset):
+    squares = common_calulations(dataset)
+    
+    feature_entropies = get_feature_entropies(dataset, squares)
+    total_entropy = get_dataset_entropy(dataset, squares)
+    
+    return feature_entropies, total_entropy
+    
+    
+def get_dataset_entropy(dataset, squares):
 
-    features = len(dataset[0])
-    instances = len(dataset)
-
-    max_values = [max(r) for r in [list(d) for d in zip(*dataset)]]
-    min_values = [min(r) for r in [list(d) for d in zip(*dataset)]]
-
-    sample_differences = [
-    np.subtract(dataset[i], dataset[j])
-    for i in range(instances-1)
-    for j in range(i+1, instances)
-    ]
-
-    value_ranges = [
-    np.subtract(max_values[k], min_values[k])
-    for k in range(features)
-    ]
-
-    squares = np.square(np.divide(sample_differences, value_ranges))
     sample_distances = np.sqrt([np.sum(s) for s in squares])
 
     average_distance = np.average(sample_distances)
@@ -92,30 +70,34 @@ def get_dataset_entropy(dataset):
     return entropy_total
     
     
-def get_feature_entropies():
+def get_feature_entropies(dataset, squares):
+
+    #
+
+    return feature_entropies
+    
+    
+def common_calculations(dataset)
 
     features = len(dataset[0])
     instances = len(dataset)
-
-    # figure out if some of these calculations can be memoized
-
-    max_values = [max(r) for r in [list(d) for d in zip(*dataset)]]
-    min_values = [min(r) for r in [list(d) for d in zip(*dataset)]]
-
+    
     sample_differences = [
     np.subtract(dataset[i], dataset[j])
     for i in range(instances-1)
     for j in range(i+1, instances)
     ]
 
+    zip_ds = zip(*dataset)
+    max_values = [max(r) for r in [list(d) for d in zip_ds]]
+    min_values = [min(r) for r in [list(d) for d in zip_ds]]
+
     value_ranges = [
     np.subtract(max_values[k], min_values[k])
     for k in range(features)
     ]
-
-    # figure out how to do column-wise entropies
-
-    return feature_entropies
+    
+    return np.square(np.divide(sample_differences, value_ranges))
 
 
 if __name__ == '__main__':
@@ -130,4 +112,4 @@ if __name__ == '__main__':
     ds_info = next((d for d in datasets_list if d['short_name'] == ds_name), None)
 
     if ds_info is not None:
-        entry(ds_info)
+        ranking_protocol(ds_info)
