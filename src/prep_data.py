@@ -14,11 +14,24 @@ def discover_datasets():
     return datasets_dict['datasets']
 
 
+def get_label_names(dataset_info):
+    short_name = dataset_info['short_name']
+    drop_attributes = dataset_info['remove_attributes']
+
+    with open('../data/' + short_name + '/names.json', 'r') as file:
+        label_names = json.load(file)
+
+    for i in sort_and_zero_base(drop_attributes):
+        del(label_names[i])
+
+    return label_names
+
+
 def get_clean_data(dataset_info, dump=False):
     dataset_csv = get_raw_data(dataset_info)
 
     dataset_csv = drop_rows_and_columns(
-        dataset_csv, 
+        dataset_csv,
         dataset_info['remove_instances'],
         dataset_info['remove_attributes'])
 
@@ -28,6 +41,7 @@ def get_clean_data(dataset_info, dump=False):
         dump_dataset(dataset)
 
     return dataset
+
 
 def get_raw_data(dataset_info, dump=False):
     short_name = dataset_info['short_name']
@@ -45,14 +59,10 @@ def get_raw_data(dataset_info, dump=False):
 
 
 def drop_rows_and_columns(dataset_csv, rows, cols):
-    # print('   Dropped: ', end='')
-
     for row in sort_and_zero_base(rows):
         del(dataset_csv[row])
-        # print('r', row, ' ', end='')
 
     for col in sort_and_zero_base(cols):
-        # print('c', col, ' ', end='')
         for row in range(0, len(dataset_csv)):
             del(dataset_csv[row][col])
 
