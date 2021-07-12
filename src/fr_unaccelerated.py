@@ -18,53 +18,63 @@ def ranking_protocol(dataset_info):
     #   rounds.
     
     dataset = get_clean_data(dataset_info, dump=False)
+    label_names = get_label_names(dataset_info)
+    
+    breakpoint()
 
     # Step 1: Start with an initial full set of features (no exclusions).
     instances = len(dataset)
     features = len(dataset[0])
     exclude = [False for k in range(features)]
-    exclude = [False, True, False]
+    # exclude = [False, True, False]
+    counter = 1
 
     while True:
+        
         # Step 2: Find the total entropy of the remaing dataset, and the
         #   feature entropies of each non-excluded feature.                
-        
         remaining_dataset = []
         for row in dataset:
             remaining_dataset.append([row[k] for k in range(features) if not exclude[k]])
             
-        total_entropy = get_entropy(remaining_dataset)
+        remaining_entropy = get_entropy(remaining_dataset)
         
+        columns = np.array(dataset).transpose().tolist()        
         feature_entropies = []
-        columns = np.array(dataset).transpose().tolist()
-        
-        breakpoint()
-        
+        entropy_differences = []
         for k in range(features):
             if exclude[k]:
                 feature_entropies.append(None)
+                entropy_differences.append(float('inf')) # force no test here
             else:
-                feature_entropies.append(get_entropy([[c] for c in columns[k]]))
+                fe = get_entropy([[c] for c in columns[k]])
+                feature_entropies.append(fe)
+                ed = np.absolute(np.subtract(remaining_entropy, fe))
+                entropy_differences.append(ed)
 
         # Step 3: Find the feature fk such that the difference between the
-        #   total entropy and feature entropy for fk is minimum.
-        
-        entropy_differences = np.absolute(np.subtract(total_entropy, feature_entropies)).tolist()
+        #   total entropy and feature entropy for fk is minimum.      
         drop_index = entropy_differences.index(min(entropy_differences))
 
-        # Step 4: Exclude feature fk from the dataset and record it as the
+        # Step 4: Exclude feature fk from the dataset and report it as the
         #   "least contributing" feature.
-        # exclude[fk] = True
-        # print(column name of fk)
-
-        breakpoint()
-
+        exclude[drop_index] = True
+        
+        print('\nLoop counter: ', counter)
+        print('Excluded: ', exclude)
+        print('Entropy Differences: ', entropy_differences)
+        print('Drop index: ', drop_index)
+        # print('Label name: ', label_name[drop_index])
+        
         # Step 5: Repeat steps 2–4 until there is only one feature in F.
-        if exclude.count(False) == 1:
+        counter = counter + 1
+        if exclude.count(False) == 0:
             break
 
     # Step 6: Report the last remaining feature is the "most contributing" feature.
-    # print(that last remaining fk)
+    # print('\n')
+    # print('Final excluded: ', exclude)
+    # print('Final Entropy Differences: ', entropy_differences)
 
     return None
 
