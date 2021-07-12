@@ -17,30 +17,32 @@ def ranking_protocol(dataset_info):
     # Step 1: Start with an initial full set of features (no exclusions).
     instances = len(dataset)
     features = len(dataset[0])
-    exclude = [False for i in range(features)]
+    exclude = [False for k in range(features)]
 
     while True:
         # Step 2: Find the total entropy of the remaing dataset, and the
         #   feature entropies of each non-excluded feature.
-        # dataset = [ds[i] for i in [ds[i][k] for k in dataset[i] if exclude[k] not False]
+        masked_dataset = []
+        for row in dataset:
+            masked_dataset.append([row[k] for k in range(features) if not exclude[k]])
 
-        # breakpoint()
-
-        total_entropy, feature_entropies = get_entropies(dataset)
+        total_entropy, feature_entropies = get_entropies(masked_dataset)
 
         # Step 3: Find the feature fk such that the difference between the
         #   total entropy and feature entropy for fk is minimum.
-        entropy_difference = np.subtract(total_entropy, feature_entropies)
-        #       need feature index
+        entropy_differences = np.absolute(np.subtract(total_entropy, feature_entropies)).tolist()
+        drop_feature_index = entropy_differences.index(min(entropy_differences))
 
         # Step 4: Exclude feature fk from the dataset and record it as the
         #   "least contributing" feature.
         # exclude[fk] = True
         # print(column name of fk)
 
+        breakpoint()
+
         # Step 5: Repeat steps 2–4 until there is only one feature in F.
-        # if (there is only one unexcluded feature in exclude):
-        break
+        if exclude.count(False) == 1:
+            break
 
     # Step 6: Report the last remaining feature is the "most contributing" feature.
     # print(that last remaining fk)
@@ -74,10 +76,7 @@ def get_entropies(dataset):
     average_sample_distance = np.average(sample_distances)
     alpha = np.divide(- np.log(0.5), average_sample_distance)
 
-    breakpoint()
-
     similarities = np.exp(np.multiply(-alpha, sample_distances))
-    print('\n similarities: ', similarities)
     similarities = [s for s in similarities if s not in [1.0]]
     dissimilarities = np.subtract(1, similarities)
 
