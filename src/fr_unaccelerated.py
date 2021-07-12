@@ -15,26 +15,22 @@ def ranking_protocol(dataset_info):
     # dataset needs column labels
 
     # Step 1: Start with an initial full set of features (no exclusions).
-    exclude = [False for i in range(len(dataset[0]))]
+    instances = len(dataset)
+    features = len(dataset[0])
+    exclude = [False for i in range(features)]
 
     while True:
-        print('\n exclude: ', exclude)
-        # sys.exit('\n\nstopped')
-
         # Step 2: Find the total entropy of the remaing dataset, and the
         #   feature entropies of each non-excluded feature.
-        dataset = [dataset[k] for k in range(len(exclude)) if exclude[k] == False]
+        # dataset = [ds[i] for i in [ds[i][k] for k in dataset[i] if exclude[k] not False]
 
-        print('\n dataset: ', dataset)
-        # sys.exit('\n\nstopped')
+        # breakpoint()
 
         total_entropy, feature_entropies = get_entropies(dataset)
 
         # Step 3: Find the feature fk such that the difference between the
         #   total entropy and feature entropy for fk is minimum.
         entropy_difference = np.subtract(total_entropy, feature_entropies)
-        print('\n entropy_difference: ', dataset)
-
         #       need feature index
 
         # Step 4: Exclude feature fk from the dataset and record it as the
@@ -63,9 +59,8 @@ def get_entropies(dataset):
     for j in range(i+1, instances)
     ]
 
-    zip_ds = zip(*dataset)
-    max_values = [max(r) for r in [list(d) for d in zip_ds]]
-    min_values = [min(r) for r in [list(d) for d in zip_ds]]
+    max_values = [max(r) for r in [list(d) for d in zip(*dataset)]]
+    min_values = [min(r) for r in [list(d) for d in zip(*dataset)]]
 
     value_ranges = [
     np.subtract(max_values[k], min_values[k])
@@ -75,16 +70,18 @@ def get_entropies(dataset):
     normalized = np.divide(sample_differences, value_ranges)
 
     # Calculate total entropy
-    sample_distances = np.sqrt(np.sum(np.square(normalized)))
+    sample_distances = np.sqrt([np.sum(s) for s in np.square(normalized)])
     average_sample_distance = np.average(sample_distances)
     alpha = np.divide(- np.log(0.5), average_sample_distance)
 
-    similarities = np.exp(np.multiply(-alpha, sample_distances))
-    similarities = [i for i in similarities if i not in [1.0]]
-    dissimilarities = np.subtract(1.0, similarities)
+    breakpoint()
 
-    pairwise_entropies = 
-    np.add(
+    similarities = np.exp(np.multiply(-alpha, sample_distances))
+    print('\n similarities: ', similarities)
+    similarities = [s for s in similarities if s not in [1.0]]
+    dissimilarities = np.subtract(1, similarities)
+
+    pairwise_entropies = np.add(
     np.multiply(similarities, np.log10(similarities)), 
     np.multiply(dissimilarities, np.log10(dissimilarities))
     )
@@ -92,7 +89,8 @@ def get_entropies(dataset):
     total_entropy = - np.sum(pairwise_entropies)
 
     # Calculate feature entropies
-    x = np.absoulte(normalized)
+    # x = np.absoulte(normalized)
+    feature_entropies = [0.1 * f for f in range(features)] # fake output for now
 
     return total_entropy, feature_entropies
 
