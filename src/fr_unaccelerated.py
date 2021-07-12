@@ -9,29 +9,48 @@ from prep_data import *
 
 
 def ranking_protocol(dataset_info):
-    # print(dataset_info)
+
+    # The ranking protocol will rank dataset features from the "least important"
+    #   to the "most important", in the sense that low-ranking features 
+    #   contribute the least "surprisal" to the remaining dataset to which they 
+    #   being compared. In each round, the protocol will identify the least
+    #   contributing feature, then drop it from consideration in following
+    #   rounds.
+    
     dataset = get_clean_data(dataset_info, dump=False)
-    # need column names (get this in prep_data)
-    # dataset needs column labels
 
     # Step 1: Start with an initial full set of features (no exclusions).
     instances = len(dataset)
     features = len(dataset[0])
     exclude = [False for k in range(features)]
+    exclude = [False, True, False]
 
     while True:
         # Step 2: Find the total entropy of the remaing dataset, and the
-        #   feature entropies of each non-excluded feature.
-        masked_dataset = []
+        #   feature entropies of each non-excluded feature.                
+        
+        remaining_dataset = []
         for row in dataset:
-            masked_dataset.append([row[k] for k in range(features) if not exclude[k]])
-
-        total_entropy, feature_entropies = get_entropies(masked_dataset)
+            remaining_dataset.append([row[k] for k in range(features) if not exclude[k]])
+            
+        total_entropy = get_entropy(remaining_dataset)
+        
+        feature_entropies = []
+        columns = np.array(dataset).transpose().tolist()
+        
+        breakpoint()
+        
+        for k in range(features):
+            if exclude[k]:
+                feature_entropies.append(None)
+            else:
+                feature_entropies.append(get_entropy([[c] for c in columns[k]]))
 
         # Step 3: Find the feature fk such that the difference between the
         #   total entropy and feature entropy for fk is minimum.
+        
         entropy_differences = np.absolute(np.subtract(total_entropy, feature_entropies)).tolist()
-        drop_feature_index = entropy_differences.index(min(entropy_differences))
+        drop_index = entropy_differences.index(min(entropy_differences))
 
         # Step 4: Exclude feature fk from the dataset and record it as the
         #   "least contributing" feature.
@@ -50,7 +69,7 @@ def ranking_protocol(dataset_info):
     return None
 
 
-def get_entropies(dataset):
+def get_entropy(dataset):
 
     features = len(dataset[0])
     instances = len(dataset)
@@ -85,13 +104,9 @@ def get_entropies(dataset):
     np.multiply(dissimilarities, np.log10(dissimilarities))
     )
 
-    total_entropy = - np.sum(pairwise_entropies)
+    entropy = - np.sum(pairwise_entropies)
 
-    # Calculate feature entropies
-    # x = np.absoulte(normalized)
-    feature_entropies = [0.1 * f for f in range(features)] # fake output for now
-
-    return total_entropy, feature_entropies
+    return entropy
 
 
 if __name__ == '__main__':
