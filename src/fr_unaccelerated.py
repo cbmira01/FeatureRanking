@@ -61,6 +61,7 @@ def ranking_protocol(dataset_info):
 
         print('\n    Round', counter, ', dropped ', label_names[drop_index], end='')
         # print('  ', entropy_differences)
+        sys.stdout.flush() 
 
         # Step 5: Repeat steps 2–4 until no features remain.
         counter = counter + 1
