@@ -31,29 +31,15 @@
       },
 
       {
-         "short_name": "glass",
-         "long_name": "Glass Identification Data Set",
-         "abstract": "From USA Forensic Science Service; 6 types of glass; defined in terms of their oxide content (i.e. Na, Fe, K, etc)",
-         "in_folder": "./data/glass",
-         "website": "https://archive.ics.uci.edu/ml/datasets/glass+identification",
-         "instances": 214,
-         "attributes": 11,
+         "short_name": "wine",
+         "long_name": "Wine Data Set",
+         "abstract": "Using chemical analysis determine the origin of wines",
+         "in_folder": "./data/wine",
+         "website": "https://archive.ics.uci.edu/ml/datasets/wine",
+         "instances": 178,
+         "attributes": 14,
          "missing_values": "false",
-         "remove_attributes": [1, 11],
-         "remove_instances": [],
-         "active": "true"
-      },
-
-      {
-         "short_name": "cardio",
-         "long_name": "Cardiotocography Data Set",
-         "abstract": "The dataset consists of measurements of fetal heart rate (FHR) and uterine contraction (UC) features on cardiotocograms classified by expert obstetricians.",
-         "in_folder": "./data/cardio",
-         "website": "https://archive.ics.uci.edu/ml/datasets/cardiotocography",
-         "instances": 2126,
-         "attributes": 23,
-         "missing_values": "false",
-         "remove_attributes": [23],
+         "remove_attributes": [1],
          "remove_instances": [],
          "active": "true"
       },
@@ -73,15 +59,15 @@
       },
 
       {
-         "short_name": "wine",
-         "long_name": "Wine Data Set",
-         "abstract": "Using chemical analysis determine the origin of wines",
-         "in_folder": "./data/wine",
-         "website": "https://archive.ics.uci.edu/ml/datasets/wine",
-         "instances": 178,
-         "attributes": 14,
+         "short_name": "glass",
+         "long_name": "Glass Identification Data Set",
+         "abstract": "From USA Forensic Science Service; 6 types of glass; defined in terms of their oxide content (i.e. Na, Fe, K, etc)",
+         "in_folder": "./data/glass",
+         "website": "https://archive.ics.uci.edu/ml/datasets/glass+identification",
+         "instances": 214,
+         "attributes": 11,
          "missing_values": "false",
-         "remove_attributes": [1],
+         "remove_attributes": [1, 11],
          "remove_instances": [],
          "active": "true"
       },
@@ -96,6 +82,20 @@
          "attributes": 25,
          "missing_values": "false",
          "remove_attributes": [25],
+         "remove_instances": [],
+         "active": "true"
+      },
+
+      {
+         "short_name": "cardio",
+         "long_name": "Cardiotocography Data Set",
+         "abstract": "The dataset consists of measurements of fetal heart rate (FHR) and uterine contraction (UC) features on cardiotocograms classified by expert obstetricians.",
+         "in_folder": "./data/cardio",
+         "website": "https://archive.ics.uci.edu/ml/datasets/cardiotocography",
+         "instances": 2126,
+         "attributes": 23,
+         "missing_values": "false",
+         "remove_attributes": [23],
          "remove_instances": [],
          "active": "true"
       }
