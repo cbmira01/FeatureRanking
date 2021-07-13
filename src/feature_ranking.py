@@ -1,6 +1,6 @@
 
 #
-# This is the main program of the Feature Ranking pr rf5oject.
+# This is the main program of the Feature Ranking project.
 # It alows the user to list the datasets and choose one for a trial run.
 #
 
@@ -87,7 +87,7 @@ while True:
     print('list ------ List available datasets')
     print('describe -- Describe available datasets')
     print('credits --- List datasets with credits')
-    print('trial ----- Run feature ranking trial on a dataset')
+    print('trial ----- Run feature ranking trials on a dataset')
     print('exit ------ Exit')
     print()
 
