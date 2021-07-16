@@ -88,11 +88,7 @@ def get_entropy(dataset):
     zip_ds = [list(d) for d in zip(*dataset)]
     max_values = [max(r) for r in zip_ds]
     min_values = [min(r) for r in zip_ds]
-
-    value_ranges = [
-    np.subtract(max_values[k], min_values[k])
-    for k in range(features)
-    ]
+    value_ranges = np.subtract(max_values, min_values)
 
     normalized_differences = np.divide(sample_differences, value_ranges)
 
