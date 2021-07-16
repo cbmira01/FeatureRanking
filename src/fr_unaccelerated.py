@@ -30,17 +30,19 @@ def ranking_protocol(dataset_info):
     counter = 1
 
     while True:
-        # Step 2: Find the total entropy of the remaing dataset, and the
-        #   feature entropies of each non-excluded feature.
+        # Step 2a: Find the total entropy of the remaing dataset.
         remaining_dataset = []
+
         for row in dataset:
             remaining_dataset.append([row[k] for k in range(features) if not exclude[k]])
 
         remaining_entropy = get_entropy(remaining_dataset)
 
+        # Step 2b: Find the entropies of each non-excluded feature.
         columns = np.array(dataset).transpose().tolist()
         feature_entropies = [] # for debugging
         entropy_differences = []
+
         for k in range(features):
             if exclude[k]:
                 feature_entropies.append(None)
@@ -59,8 +61,9 @@ def ranking_protocol(dataset_info):
         #   "least contributing" feature.
         exclude[drop_index] = True
 
-        print('\n    Round', counter, ', dropped ', label_names[drop_index], end='')
-        # print('  ', entropy_differences)
+        print('\nRound', counter, ', dropped', label_names[drop_index])
+        print('    Remaining entropy:   ', remaining_entropy)
+        print('    Entropy differences: ', entropy_differences)
         sys.stdout.flush() 
 
         # Step 5: Repeat steps 2–4 until no features remain.
@@ -82,23 +85,25 @@ def get_entropy(dataset):
     for j in range(i+1, instances)
     ]
 
-    max_values = [max(r) for r in [list(d) for d in zip(*dataset)]]
-    min_values = [min(r) for r in [list(d) for d in zip(*dataset)]]
+    zip_ds = [list(d) for d in zip(*dataset)]
+    max_values = [max(r) for r in zip_ds]
+    min_values = [min(r) for r in zip_ds]
 
     value_ranges = [
     np.subtract(max_values[k], min_values[k])
     for k in range(features)
     ]
 
-    normalized = np.divide(sample_differences, value_ranges)
+    normalized_differences = np.divide(sample_differences, value_ranges)
 
     # Calculate total entropy
-    sample_distances = np.sqrt([np.sum(s) for s in np.square(normalized)])
+    sample_distances = np.sqrt([np.sum(s) for s in np.square(normalized_differences)])
+    sample_distances = [sd for sd in sample_distances if sd != 0] # avoid zero distances
+
     average_sample_distance = np.average(sample_distances)
     alpha = np.divide(- np.log(0.5), average_sample_distance)
 
     similarities = np.exp(np.multiply(-alpha, sample_distances))
-    similarities = [s for s in similarities if s not in [1.0]] # avoid log(0) = inf
     dissimilarities = np.subtract(1, similarities)
 
     pairwise_entropies = np.add(
