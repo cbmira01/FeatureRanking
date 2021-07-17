@@ -9,11 +9,11 @@ import sys
 from prep_data import *
 
 def opencl_device_driver(dataset_info):
-
+    # breakpoint()
     for platform in cl.get_platforms():
         for device in platform.get_devices(cl.device_type.ALL):
             print([device], '\n')
-            ranking_protocol(dataset_info, device)
+            ranking_protocol(dataset_info, [device])
 
     return None
 
@@ -21,10 +21,10 @@ def opencl_device_driver(dataset_info):
 def ranking_protocol(dataset_info, device):
 
     # Prepare the context, command queue and program  for the current device
+    context = cl.Context(device)
+
     with open('./kernels/feature_ranking.cl', 'r') as f:
         kernel_source = f.read()
-
-    context = cl.Context([device])
 
     try: 
         program = cl.Program(context, kernel_source).build()
@@ -82,7 +82,7 @@ def ranking_protocol(dataset_info, device):
 
     dataset = dataset2
     label_names = label_names2
-
+    # breakpoint()
     # for now, call entropy calculation here
     get_entropy_opencl(dataset, context, program)
 
@@ -145,24 +145,30 @@ def ranking_protocol(dataset_info, device):
     return None
 
 
-def get_entropy_opencl(dataset, context, program):
+def get_entropy_opencl(dataset, ctx, program):
 
     # OpenCL execution context and compiled program on hand
-    mem_flags = cl.mem_flags
-    command_queue = cl.CommandQueue(context)
+    mf = cl.mem_flags
+    queue = cl.CommandQueue(ctx)
 
-    # Marshal Python-hosted data into the device global data area
+    # Prepare the dataset
+    features = len(dataset[0])
+    instances = len(dataset)
+    dataset_np = np.array(dataset).astype(np.float32)
 
-    # Designate a portion of the global data to hold result of computation
-
-    # Call the kernel on global arguments
-
-    # Marshal computation results into a Python-hosted array
+    # Define all result buffers...
+    sample_differences_np = np.empty(3 * 3).astype(np.float32)
+    sample_differences_g = cl.Buffer(ctx, mf.WRITE_ONLY, size=3*3*4)
+    
+    # Sample Differences
+    dataset_g = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=dataset_np)
+    program.sample_differences(queue, [3,3], None, dataset_g, np.int32(3), np.int32(3), sample_differences_g)
+    cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
+    breakpoint()
 
     # ------------------------------------------------------------------
 
-    # features = len(dataset[0])
-    # instances = len(dataset)
+
 
     # sample_differences = [
     # np.subtract(dataset[i], dataset[j])
