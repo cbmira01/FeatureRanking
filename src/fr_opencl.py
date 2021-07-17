@@ -17,7 +17,24 @@ def opencl_device_driver(dataset_info):
 
     return None
 
+
 def ranking_protocol(dataset_info, device):
+
+    # Prepare the context, command queue and program  for the current device
+    with open('./kernels/feature_ranking.cl', 'r') as f:
+        kernel_source = f.read()
+
+    context = cl.Context([device])
+
+    try: 
+        program = cl.Program(context, kernel_source).build()
+    except:
+        print('\n\n      There was an error while building the kernel...')
+        e = sys.exc_info()
+        print('\nError type: ', e[0])
+        print('\nError value: \n', e[1])
+        # print('\nError traceback: ', e[2])
+        sys.exit()
 
     dataset1 = [
     [3, 2, 1],
@@ -67,7 +84,7 @@ def ranking_protocol(dataset_info, device):
     label_names = label_names2
 
     # for now, call entropy calculation here
-    get_entropy_opencl(dataset, device)
+    get_entropy_opencl(dataset, context, program)
 
     sys.exit()
     # ------------------------------------
@@ -128,13 +145,11 @@ def ranking_protocol(dataset_info, device):
     return None
 
 
-def get_entropy_opencl(dataset, device):
+def get_entropy_opencl(dataset, context, program):
 
-    # OpenCL platform and device in hand
-
-    # Prepare the context and command queue for the current device
-
-    # Compile the OpenCL program
+    # OpenCL execution context and compiled program on hand
+    mem_flags = cl.mem_flags
+    command_queue = cl.CommandQueue(context)
 
     # Marshal Python-hosted data into the device global data area
 
