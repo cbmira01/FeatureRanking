@@ -3,23 +3,21 @@
 # This is the host program for the OpenCL implementation of Feature Ranking
 #
 
-
+import pyopencl as cl
 import numpy as np
 import sys
-# from prep_data import *
+from prep_data import *
 
-def platform_device_driver():
+def opencl_device_driver(dataset_info):
 
-    # for all platforms
-    #   for all devices
-    #       print device information
-    #       do ranking_protocol()
-
-    ranking_protocol() # ds_info, platform, device
+    for platform in cl.get_platforms():
+        for device in platform.get_devices(cl.device_type.ALL):
+            print([device], '\n')
+            ranking_protocol(dataset_info, device)
 
     return None
 
-def ranking_protocol():
+def ranking_protocol(dataset_info, device):
 
     dataset1 = [
     [3, 2, 1],
@@ -58,10 +56,10 @@ def ranking_protocol():
     ]
 
     print(label_names1)
-    print(*dataset1,sep='\n')
+    # print(*dataset1,sep='\n')
     print('\n')
     print(label_names2)
-    print(*dataset2,sep='\n')
+    # print(*dataset2,sep='\n')
 
     # ------------------------------------
 
@@ -69,14 +67,15 @@ def ranking_protocol():
     label_names = label_names2
 
     # for now, call entropy calculation here
-    # get_entropy_opencl(dataset, platform, device)
+    get_entropy_opencl(dataset, device)
 
     sys.exit()
     # ------------------------------------
 
     print('\n')
-    print(dataset_info['long_name'])
+    print('Dataset: ', dataset_info['long_name'])
     print('Label names: ', label_names)
+    print('OpenCL device:', device)
 
     # Step 1: Start with an initial full set of features (no exclusions).
     instances = len(dataset)
@@ -129,7 +128,7 @@ def ranking_protocol():
     return None
 
 
-def get_entropy_opencl(dataset, platform, device):
+def get_entropy_opencl(dataset, device):
 
     # OpenCL platform and device in hand
 
@@ -180,9 +179,19 @@ def get_entropy_opencl(dataset, platform, device):
 
     # entropy = - np.sum(pairwise_entropies)
 
-return None
+    return None
 
 
 if __name__ == '__main__':
 
-        platform_device_driver()
+    print('\nCheck OpenCL Feature Ranking at console...\n')
+
+    datasets_list = discover_datasets()
+    for ds in datasets_list:
+        print(ds['short_name'], '  ', end='')
+
+    ds_name = input('\n\nChose a dataset: ').lower()
+    ds_info = next((d for d in datasets_list if d['short_name'] == ds_name), None)
+
+    if ds_info is not None:
+        opencl_device_driver(ds_info)

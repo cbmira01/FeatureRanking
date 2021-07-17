@@ -20,7 +20,7 @@ def ranking_protocol(dataset_info):
     dataset = get_clean_data(dataset_info, dump=False)
     label_names = get_label_names(dataset_info)
     print('\n')
-    print(dataset_info['long_name'])
+    print('Dataset: ', dataset_info['long_name'])
     print('Label names: ', label_names)
 
     # Step 1: Start with an initial full set of features (no exclusions).
