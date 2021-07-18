@@ -57,7 +57,7 @@ with open('./kernels/quick_test.cl', 'r') as f:
 
 for platform in cl.get_platforms():
     for device in platform.get_devices(cl.device_type.ALL):
-        print([device], '\n')
+        print(device, '\n')
         print('    ', first_argument_np)
         print('   *', second_argument_np)
 

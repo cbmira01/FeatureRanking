@@ -12,7 +12,7 @@ def opencl_device_driver(dataset_info):
     # breakpoint()
     for platform in cl.get_platforms():
         for device in platform.get_devices(cl.device_type.ALL):
-            print([device], '\n')
+            print(device, '\n')
             ranking_protocol(dataset_info, [device])
 
     return None
@@ -80,8 +80,8 @@ def ranking_protocol(dataset_info, device):
 
     # ------------------------------------
 
-    dataset = dataset2
-    label_names = label_names2
+    dataset = dataset1
+    label_names = label_names1
     # breakpoint()
     # for now, call entropy calculation here
     get_entropy_opencl(dataset, context, program)
@@ -146,7 +146,7 @@ def ranking_protocol(dataset_info, device):
 
 
 def get_entropy_opencl(dataset, ctx, program):
-
+    breakpoint()
     # OpenCL execution context and compiled program on hand
     mf = cl.mem_flags
     queue = cl.CommandQueue(ctx)
@@ -157,14 +157,14 @@ def get_entropy_opencl(dataset, ctx, program):
     dataset_np = np.array(dataset).astype(np.float32)
 
     # Define all result buffers...
-    sample_differences_np = np.empty(3 * 3).astype(np.float32)
-    sample_differences_g = cl.Buffer(ctx, mf.WRITE_ONLY, size=3*3*4)
+    buffer_size = features * instances * np.float32(np.inf).nbytes 
+    sample_differences_np = np.empty(features * instances).astype(np.float32)
+    sample_differences_g = cl.Buffer(ctx, mf.WRITE_ONLY, size=buffer_size)
     
     # Sample Differences
     dataset_g = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=dataset_np)
-    program.sample_differences(queue, [3,3], None, dataset_g, np.int32(3), np.int32(3), sample_differences_g)
+    program.sample_differences(queue, dataset_np.shape, None, dataset_g, np.int32(3), np.int32(3), sample_differences_g)
     cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
-    breakpoint()
 
     # ------------------------------------------------------------------
 
