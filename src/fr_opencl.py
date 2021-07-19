@@ -113,13 +113,19 @@ def get_entropy_opencl(dataset, ctx, program):
     # Define all result buffers...
     buffer_size = features * instances * np.float32(np.inf).nbytes 
     sample_differences_np = np.empty(features * instances).astype(np.float32)
-    sample_differences_g = cl.Buffer(ctx, mf.WRITE_ONLY, size=buffer_size)
+    result_g = cl.Buffer(ctx, mf.WRITE_ONLY, size=buffer_size)
+    rows_g = cl.Buffer(
+        ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np.int32(instances))
+    columns_g = cl.Buffer(
+        ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np.int32(features))
     
     # Sample Differences
     dataset_g = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=dataset_np)
-    program.sample_differences(queue, dataset_np.shape, None, dataset_g, np.int32(3), np.int32(3), sample_differences_g)
+    program.sample_differences(queue, dataset_np.shape, None, dataset_g, rows_g, columns_g, result_g)
     breakpoint()
-    cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
+    cl.enqueue_copy(queue, sample_differences_np, result_g)
+
+    # ------------------------------------------------------------------
 
     # ------------------------------------------------------------------
 
