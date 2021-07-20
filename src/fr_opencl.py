@@ -112,20 +112,6 @@ def get_entropy_opencl(dataset, ctx, program):
 
 
     # Sample Differences
-    dataset_buffer_size = features * instances * np.float32(np.inf).nbytes 
-    # result_g_buffer_size = ((instances ** 2 - instances) // 2) * features * np.float32(np.inf).nbytes 
-    sample_differences_np = np.empty(((instances ** 2 - instances) // 2) * features).astype(np.float32)
-
-    dataset_g = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=dataset_np)
-    result_g = cl.Buffer(ctx, mf.WRITE_ONLY, size=sample_differences_np.nbytes)
-    # rows_g = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np.int32(instances))
-    # columns_g = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np.int32(features))
-
-    program.sample_differences(queue, dataset_np.shape, None, dataset_g, np.int32(features), np.int32(instances), result_g)
-    breakpoint()
-    cl.enqueue_copy(queue, sample_differences_np, result_g)
-
-    # ------------------------------------------------------------------
 
     # sample_differences = [
     # np.subtract(dataset[i], dataset[j])
@@ -133,6 +119,18 @@ def get_entropy_opencl(dataset, ctx, program):
     # for j in range(i+1, instances)
     # ]
 
+    dataset_g = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=dataset_np)
+    sample_differences_np = np.empty([features, ((instances ** 2 - instances) // 2)]).astype(np.float32)
+    sample_differences_g = cl.Buffer(ctx, mf.WRITE_ONLY, size=sample_differences_np.nbytes)
+
+    program.sample_differences(
+        queue, dataset_np.shape, None, 
+        dataset_g, np.int32(features), np.int32(instances), 
+        sample_differences_g)
+
+    cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
+    # print(sample_differences_np.tolist())
+    breakpoint()
     # ------------------------------------------------------------------
 
 
