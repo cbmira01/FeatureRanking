@@ -40,9 +40,9 @@ def ranking_protocol(dataset_info, device):
     label_names = get_label_names(dataset_info)
 
     print('\n')
+    print('Trial on OpenCL device: ', device)
     print('Dataset: ', dataset_info['long_name'])
     print('Label names: ', label_names)
-    print('OpenCL device:', device)
 
     # for now, call entropy calculation here
     get_entropy_opencl(dataset, context, program)
@@ -110,32 +110,31 @@ def get_entropy_opencl(dataset, ctx, program):
     instances = len(dataset)
     dataset_np = np.array(dataset).astype(np.float32)
 
-    # Define all result buffers...
-    buffer_size = features * instances * np.float32(np.inf).nbytes 
-    sample_differences_np = np.empty(features * instances).astype(np.float32)
-    result_g = cl.Buffer(ctx, mf.WRITE_ONLY, size=buffer_size)
-    rows_g = cl.Buffer(
-        ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np.int32(instances))
-    columns_g = cl.Buffer(
-        ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np.int32(features))
-    
+
     # Sample Differences
+    dataset_buffer_size = features * instances * np.float32(np.inf).nbytes 
+    # result_g_buffer_size = ((instances ** 2 - instances) // 2) * features * np.float32(np.inf).nbytes 
+    sample_differences_np = np.empty(((instances ** 2 - instances) // 2) * features).astype(np.float32)
+
     dataset_g = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=dataset_np)
-    program.sample_differences(queue, dataset_np.shape, None, dataset_g, rows_g, columns_g, result_g)
+    result_g = cl.Buffer(ctx, mf.WRITE_ONLY, size=sample_differences_np.nbytes)
+    # rows_g = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np.int32(instances))
+    # columns_g = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=np.int32(features))
+
+    program.sample_differences(queue, dataset_np.shape, None, dataset_g, np.int32(features), np.int32(instances), result_g)
     breakpoint()
     cl.enqueue_copy(queue, sample_differences_np, result_g)
 
     # ------------------------------------------------------------------
-
-    # ------------------------------------------------------------------
-
-
 
     # sample_differences = [
     # np.subtract(dataset[i], dataset[j])
     # for i in range(instances-1)
     # for j in range(i+1, instances)
     # ]
+
+    # ------------------------------------------------------------------
+
 
     # zip_ds = [list(d) for d in zip(*dataset)]
     # max_values = [max(r) for r in zip_ds]
