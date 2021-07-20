@@ -13,18 +13,17 @@ __kernel void sample_differences(
     int i = get_global_id(0); # dataset row i
     int j = get_global_id(1); # dataset row j
 
-    if (i < j) # ( (n^2 - n) / 2 ) row comparisons
+    # ((n^2 - n) / 2) new rows will result here
+    if (i < j) 
     {
         for (k = 0; k < features; k++) {
-            row = # some function of i,j, and instances, zero-based
-            result_g[row*features + k] = 
-                dataset_g[i*features + k] - dataset_g[j*features + k]; 
+            // Thanks to https://math.stackexchange.com/a/646125 for new row address scheme
+            new_row = (2 * i * n - i ** 2 + 2 * j - 3 * i - 2) / 2
+            result_g[new_row * features + k] = 
+                dataset_g[i * features + k] - dataset_g[j * features + k]; 
         }
     }
 }
-
-// result_g layout for sample_differences:
-// idx = (2 * i * n - i ** 2 + 2 * j - 3 * i - 2) / 2
 
 // __kernel void min_max_values(arguments) { }
 
