@@ -128,7 +128,7 @@ def get_entropy_opencl(dataset, ctx, program):
         sample_differences_g)
 
     cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
-
+    breakpoint()
     # ------------------------------------------------------------------
 
 
