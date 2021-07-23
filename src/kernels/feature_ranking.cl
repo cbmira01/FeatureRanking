@@ -25,7 +25,36 @@ __kernel void sample_differences(
     }
 }
 
-// __kernel void min_max_values(arguments) { }
+__kernel void min_max_values(
+    __global float *dataset_g, 
+    const int features, 
+    const int instances,
+    __global float *min_values_g,
+    __global float *max_values_g,
+    __global float *value_ranges_g) 
+{
+    int row;
+    float cur_val;
+    int k = get_global_id(0); // range over features
+
+    min_values_g[k] = dataset_g[k];
+    max_values_g[k] = dataset_g[k];
+
+    for (row = 1; row < instances; row++) {
+
+        cur_val = dataset_g[row * features + k];
+
+        if (cur_val < min_values_g[k])
+            min_values_g[k] = cur_val;
+
+        if (cur_val > max_values_g[k])
+            max_values_g[k] = cur_val;
+    }
+
+    mem_fence(CLK_GLOBAL_MEM_FENCE); // finish prior calculations
+
+    value_ranges_g[k] = max_values_g[k] - min_values_g[k];
+}
 
 // __kernel void value_ranges(arguments) { }
 

@@ -108,7 +108,7 @@ def get_entropy_opencl(dataset, ctx, program):
     features = len(dataset[0])
     instances = len(dataset)
 
-    # Sample Differences
+    # ------------------------------------------------------------------
 
     # sample_differences = [
     # np.subtract(dataset[i], dataset[j])
@@ -128,14 +128,46 @@ def get_entropy_opencl(dataset, ctx, program):
         sample_differences_g)
 
     cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
-    breakpoint()
-    # ------------------------------------------------------------------
 
+    # breakpoint()
+
+    # ------------------------------------------------------------------
 
     # zip_ds = [list(d) for d in zip(*dataset)]
     # max_values = [max(r) for r in zip_ds]
     # min_values = [min(r) for r in zip_ds]
     # value_ranges = np.subtract(max_values, min_values)
+
+    dataset_np = np.array(dataset).astype(np.float32)
+    dataset_g = cl.Buffer(ctx, mf.COPY_HOST_PTR, hostbuf=dataset_np)
+
+    min_values_np = np.empty([features]).astype(np.float32)
+    min_values_g = cl.Buffer(ctx, mf.READ_WRITE, min_values_np.nbytes)
+
+    max_values_np = np.empty([features]).astype(np.float32)
+    max_values_g = cl.Buffer(ctx, mf.READ_WRITE, max_values_np.nbytes)
+
+    value_ranges_np = np.empty([features]).astype(np.float32)
+    value_ranges_g = cl.Buffer(ctx, mf.READ_WRITE, value_ranges_np.nbytes)
+
+    program.min_max_values(
+        queue, (features,), None, 
+        dataset_g, 
+        np.int32(features),
+        np.int32(instances), 
+        min_values_g,
+        max_values_g,
+        value_ranges_g)
+
+    # Min and max values can be uncommented and examined if need be
+    # cl.enqueue_copy(queue, min_values_np, min_values_g)
+    # cl.enqueue_copy(queue, max_values_np, max_values_g)
+    cl.enqueue_copy(queue, value_ranges_np, value_ranges_g)
+
+    breakpoint()
+
+    # ------------------------------------------------------------------
+
 
     # normalized_differences = np.divide(sample_differences, value_ranges)
 
