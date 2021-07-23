@@ -171,6 +171,27 @@ def get_entropy_opencl(dataset, ctx, program):
 
     # normalized_differences = np.divide(sample_differences, value_ranges)
 
+    sample_differences_g = cl.Buffer(ctx, mf.COPY_HOST_PTR, hostbuf=sample_differences_np)
+    value_ranges_g = cl.Buffer(ctx, mf.COPY_HOST_PTR, hostbuf=value_ranges_np)
+
+    num_rows, num_cols = normalized_differences_np.shape 
+    normalized_differences_np = np.empty([num_rows, num_cols]).astype(np.float32)
+    normalized_differences_g = cl.Buffer(ctx, mf.READ_WRITE, normalized_differences_np.nbytes)
+
+    program.normalized_differences(
+        queue, (features,), None, 
+        sample_differences_g, 
+        value_ranges_g,
+        np.int32(features),
+        np.int32(instances), 
+        normalized_differences_g)
+
+
+
+    breakpoint()
+
+    # ------------------------------------------------------------------
+
     # Calculate total entropy
     # sample_distances = np.sqrt([np.sum(s) for s in np.square(normalized_differences)])
     # sample_distances = [sd for sd in sample_distances if sd != 0] # avoid zero distances

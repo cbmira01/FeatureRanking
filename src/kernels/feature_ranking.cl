@@ -56,8 +56,6 @@ __kernel void min_max_values(
     value_ranges_g[k] = max_values_g[k] - min_values_g[k];
 }
 
-// __kernel void value_ranges(arguments) { }
-
 // __kernel void normalized_differences(arguments) { }
 
 // __kernel void sample_distances(arguments) { }
