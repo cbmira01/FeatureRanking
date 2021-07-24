@@ -98,7 +98,7 @@ __kernel void sample_distances(
 
 // ---------------------------------------------------------------------
 
-// __kernel void average_sample_distance(arguments) { }
+//__kernel void sum_distances(){}  
 
 // ---------------------------------------------------------------------
 
