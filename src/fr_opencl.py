@@ -164,29 +164,28 @@ def get_entropy_opencl(dataset, ctx, program):
     # cl.enqueue_copy(queue, max_values_np, max_values_g)
     cl.enqueue_copy(queue, value_ranges_np, value_ranges_g)
 
-    breakpoint()
+    # breakpoint()
 
     # ------------------------------------------------------------------
-
 
     # normalized_differences = np.divide(sample_differences, value_ranges)
 
     sample_differences_g = cl.Buffer(ctx, mf.COPY_HOST_PTR, hostbuf=sample_differences_np)
     value_ranges_g = cl.Buffer(ctx, mf.COPY_HOST_PTR, hostbuf=value_ranges_np)
 
-    num_rows, num_cols = normalized_differences_np.shape 
+    num_rows, num_cols = np.shape(sample_differences_np)
     normalized_differences_np = np.empty([num_rows, num_cols]).astype(np.float32)
     normalized_differences_g = cl.Buffer(ctx, mf.READ_WRITE, normalized_differences_np.nbytes)
 
     program.normalized_differences(
-        queue, (features,), None, 
+        queue, (num_cols,), None, 
         sample_differences_g, 
         value_ranges_g,
-        np.int32(features),
-        np.int32(instances), 
+        np.int32(num_cols),
+        np.int32(num_rows), 
         normalized_differences_g)
 
-
+    cl.enqueue_copy(queue, normalized_differences_np, normalized_differences_g)
 
     breakpoint()
 
@@ -196,16 +195,24 @@ def get_entropy_opencl(dataset, ctx, program):
     # sample_distances = np.sqrt([np.sum(s) for s in np.square(normalized_differences)])
     # sample_distances = [sd for sd in sample_distances if sd != 0] # avoid zero distances
 
+    # ------------------------------------------------------------------
+
     # average_sample_distance = np.average(sample_distances)
     # alpha = np.divide(- np.log(0.5), average_sample_distance)
 
+    # ------------------------------------------------------------------
+
     # similarities = np.exp(np.multiply(-alpha, sample_distances))
     # dissimilarities = np.subtract(1, similarities)
+
+    # ------------------------------------------------------------------
 
     # pairwise_entropies = np.add(
     # np.multiply(similarities, np.log10(similarities)),
     # np.multiply(dissimilarities, np.log10(dissimilarities))
     # )
+
+    # ------------------------------------------------------------------
 
     # entropy = - np.sum(pairwise_entropies)
 

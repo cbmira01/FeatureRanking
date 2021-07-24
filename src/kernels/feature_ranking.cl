@@ -3,6 +3,8 @@
 // OpenCL kernels to solve entropic measure feature ranking
 //
 
+// ---------------------------------------------------------------------
+
 __kernel void sample_differences( 
    __global float *dataset_g, 
    const int features, 
@@ -24,6 +26,8 @@ __kernel void sample_differences(
         }
     }
 }
+
+// ---------------------------------------------------------------------
 
 __kernel void min_max_values(
     __global float *dataset_g, 
@@ -56,18 +60,42 @@ __kernel void min_max_values(
     value_ranges_g[k] = max_values_g[k] - min_values_g[k];
 }
 
-// __kernel void normalized_differences(arguments) { }
+// ---------------------------------------------------------------------
+
+__kernel void normalized_differences(
+    __global float *sample_differences_g, 
+    __global float *value_ranges_g,
+    const int num_cols,
+    const int num_rows, 
+    __global float *normalized_differences_g)
+{ 
+    int row, addr;
+    int k = get_global_id(0); // range over columns
+
+    for (row = 0; row < num_rows; row++) {
+        addr = row * num_cols + k;
+        normalized_differences_g[addr] = 
+            sample_differences_g[addr] / value_ranges_g[k];
+    }
+}
+
+// ---------------------------------------------------------------------
 
 // __kernel void sample_distances(arguments) { }
 
+// ---------------------------------------------------------------------
+
 // __kernel void average_sample_distance(arguments) { }
+
+// ---------------------------------------------------------------------
 
 // __kernel void similarities(arguments) { }
 
-// __kernel void dissimilarities(arguments) { }
+// ---------------------------------------------------------------------
 
 // __kernel void pairwise_entropies(arguments) { }
 
+// ---------------------------------------------------------------------
+
 // __kernel void entropy(arguments) { }
 
-// __kernel void name(arguments) { }
