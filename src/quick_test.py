@@ -12,6 +12,9 @@
 
 import pyopencl as cl
 import numpy as np
+import locale
+
+locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 devtype_readable = { 
     "1": "DEFAULT",
@@ -31,15 +34,14 @@ for platform in cl.get_platforms():
         print('    ', 'Device name: ', device.name.lstrip())
         print('    ', 'Vendor: ', device.vendor.lstrip())
         print('    ', 'Version:', device.version)
-        print('    ', 'Device available? ', bool(device.available))
-        print('    ', 'Compiler available? ', bool(device.compiler_available))
-        print('    ', 'Processor type: ', 
-            devtype_readable.get(str(device.type), "Unknown..."))
-        print('    ', 'Local memory: ', device.local_mem_size)
-        print('    ', 'Global memory: ', device.global_mem_size)
-        print('    ', 'Work group size: ', device.max_work_group_size)
+        print('    ', 'Device available? ', 'Yes' if bool(device.available) else 'No')
+        print('    ', 'Compiler available? ', 'Yes' if bool(device.compiler_available) else 'No')
+        print('    ', 'Processor type: ', devtype_readable.get(str(device.type), "Unknown..."))
         print('    ', 'Compute units: ', device.max_compute_units)
+        print('    ', 'Global memory: ', format(device.global_mem_size, '>1,d'), 'bytes')
+        print('    ', 'Local memory: ', format(device.local_mem_size, '>1,d'), 'bytes')
         print('    ', 'Max work item dimensions: ', device.max_work_item_dimensions)
+        print('    ', 'Max work item sizes: ', device.max_work_item_sizes, 'work items')
         print('\n')
 
 
@@ -49,7 +51,7 @@ first_argument_np = np.random.rand(array_size).astype(np.float32)
 second_argument_np = np.random.rand(array_size).astype(np.float32)
 result_np = np.empty(array_size).astype(np.float32)
 
-print(f'Running a small workload on each device; {array_size} multiplies \n')
+print(f'Running a small workload on each device: ', format(array_size, '>1,d'), 'multiplications \n')
 
 # Fetch the OpenCL source code to run for this exercise
 with open('./kernels/quick_test.cl', 'r') as f:
