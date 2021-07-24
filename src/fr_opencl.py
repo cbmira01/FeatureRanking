@@ -187,13 +187,31 @@ def get_entropy_opencl(dataset, ctx, program):
 
     cl.enqueue_copy(queue, normalized_differences_np, normalized_differences_g)
 
-    breakpoint()
+    # breakpoint()
 
     # ------------------------------------------------------------------
 
-    # Calculate total entropy
     # sample_distances = np.sqrt([np.sum(s) for s in np.square(normalized_differences)])
     # sample_distances = [sd for sd in sample_distances if sd != 0] # avoid zero distances
+
+    normalized_differences_g = cl.Buffer(ctx, mf.COPY_HOST_PTR, hostbuf=normalized_differences_np)
+
+    num_rows, num_cols = np.shape(normalized_differences_np)
+    sample_distances_np = np.empty([num_rows]).astype(np.float32)
+    sample_distances_g = cl.Buffer(ctx, mf.READ_WRITE, sample_distances_np.nbytes)
+
+    program.sample_distances(
+        queue, (num_rows,), None, 
+        normalized_differences_g, 
+        np.int32(num_cols),
+        sample_distances_g)
+
+    cl.enqueue_copy(queue, sample_distances_np, sample_distances_g)
+    
+    # OpenCL does not deal well with variable-length arrays
+    nonzero_sample_distances_np = [sd for sd in sample_distances_np if sd != 0] # avoid zero distances
+
+    breakpoint()
 
     # ------------------------------------------------------------------
 

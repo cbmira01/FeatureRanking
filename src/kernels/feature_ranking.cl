@@ -69,8 +69,8 @@ __kernel void normalized_differences(
     const int num_rows, 
     __global float *normalized_differences_g)
 { 
-    int row, addr;
     int k = get_global_id(0); // range over columns
+    int row, addr;
 
     for (row = 0; row < num_rows; row++) {
         addr = row * num_cols + k;
@@ -81,7 +81,20 @@ __kernel void normalized_differences(
 
 // ---------------------------------------------------------------------
 
-// __kernel void sample_distances(arguments) { }
+__kernel void sample_distances(
+    __global float *normalized_differences_g, 
+    const int num_cols,
+    __global float *sample_distances_g) 
+{ 
+    int row = get_global_id(0); // range over rows
+    float sum_squares = 0.0;
+
+    for (int col = 0; col < num_cols; col++) {
+        sum_squares = sum_squares + pown(normalized_differences_g[row * num_cols + col], 2);
+    }
+
+    sample_distances_g[row] = sqrt(sum_squares);
+}
 
 // ---------------------------------------------------------------------
 
