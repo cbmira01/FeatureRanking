@@ -127,8 +127,7 @@ def get_entropy_opencl(dataset, ctx, program):
         dataset_g, np.int32(features), np.int32(instances), 
         sample_differences_g)
 
-    cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
-
+    # cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
     # breakpoint()
 
     # ------------------------------------------------------------------
@@ -138,14 +137,8 @@ def get_entropy_opencl(dataset, ctx, program):
     # min_values = [min(r) for r in zip_ds]
     # value_ranges = np.subtract(max_values, min_values)
 
-    dataset_np = np.array(dataset).astype(np.float32)
-    dataset_g = cl.Buffer(ctx, mf.COPY_HOST_PTR, hostbuf=dataset_np)
-
-    min_values_np = np.empty([features]).astype(np.float32)
-    min_values_g = cl.Buffer(ctx, mf.READ_WRITE, min_values_np.nbytes)
-
-    max_values_np = np.empty([features]).astype(np.float32)
-    max_values_g = cl.Buffer(ctx, mf.READ_WRITE, max_values_np.nbytes)
+    min_values_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty([features]).astype(np.float32).nbytes)
+    max_values_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty([features]).astype(np.float32).nbytes)
 
     value_ranges_np = np.empty([features]).astype(np.float32)
     value_ranges_g = cl.Buffer(ctx, mf.READ_WRITE, value_ranges_np.nbytes)
@@ -159,19 +152,12 @@ def get_entropy_opencl(dataset, ctx, program):
         max_values_g,
         value_ranges_g)
 
-    # Min and max values can be uncommented and examined if need be
-    # cl.enqueue_copy(queue, min_values_np, min_values_g)
-    # cl.enqueue_copy(queue, max_values_np, max_values_g)
-    cl.enqueue_copy(queue, value_ranges_np, value_ranges_g)
-
+    # cl.enqueue_copy(queue, value_ranges_np, value_ranges_g)
     # breakpoint()
 
     # ------------------------------------------------------------------
 
     # normalized_differences = np.divide(sample_differences, value_ranges)
-
-    sample_differences_g = cl.Buffer(ctx, mf.COPY_HOST_PTR, hostbuf=sample_differences_np)
-    value_ranges_g = cl.Buffer(ctx, mf.COPY_HOST_PTR, hostbuf=value_ranges_np)
 
     num_rows, num_cols = np.shape(sample_differences_np)
     normalized_differences_np = np.empty([num_rows, num_cols]).astype(np.float32)
@@ -185,16 +171,13 @@ def get_entropy_opencl(dataset, ctx, program):
         np.int32(num_rows), 
         normalized_differences_g)
 
-    cl.enqueue_copy(queue, normalized_differences_np, normalized_differences_g)
-
+    # cl.enqueue_copy(queue, normalized_differences_np, normalized_differences_g)
     # breakpoint()
 
     # ------------------------------------------------------------------
 
     # sample_distances = np.sqrt([np.sum(s) for s in np.square(normalized_differences)])
     # sample_distances = [sd for sd in sample_distances if sd != 0] # avoid zero distances
-
-    normalized_differences_g = cl.Buffer(ctx, mf.COPY_HOST_PTR, hostbuf=normalized_differences_np)
 
     num_rows, num_cols = np.shape(normalized_differences_np)
     sample_distances_np = np.empty([num_rows]).astype(np.float32)
@@ -208,14 +191,17 @@ def get_entropy_opencl(dataset, ctx, program):
 
     cl.enqueue_copy(queue, sample_distances_np, sample_distances_g)
     
-    # OpenCL does not deal well with variable-length arrays
-    nonzero_sample_distances_np = [sd for sd in sample_distances_np if sd != 0] # avoid zero distances
-
+    # Filter out zero distances
+    # OpenCL does not deal well with building variable-length arrays
+    nonzero_sample_distances_np = [sd for sd in sample_distances_np if sd != 0] 
     breakpoint()
 
     # ------------------------------------------------------------------
 
     # average_sample_distance = np.average(sample_distances)
+
+    # ------------------------------------------------------------------
+
     # alpha = np.divide(- np.log(0.5), average_sample_distance)
 
     # ------------------------------------------------------------------
