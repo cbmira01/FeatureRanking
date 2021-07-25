@@ -202,19 +202,24 @@ def get_entropy_opencl(dataset, ctx, program):
 
     sample_distances_g = cl.Buffer(ctx, mf.READ_WRITE, sample_distances_np.nbytes)
 
-    num_rows = len(sample_distances_np) # updated num_rows may reflect filtered zeros
-    sums_np = np.empty(num_rows).astype(np.float32)
-    sums_g = cl.Buffer(ctx, mf.READ_WRITE, sums_np.nbytes)
+    num_rows = len(sample_distances_np)
+    partials_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty([num_rows]).astype(np.float32).nbytes)
 
-    program.sum_distances(
+    result_np = np.empty([1]).astype(np.float32)
+    result_g = cl.Buffer(ctx, mf.READ_WRITE, result_np.nbytes)
+
+    program.sum_array(
         queue, (num_rows,), None, 
         sample_distances_g, 
         np.int32(num_rows),
-        sums_g)
+        partials_g,
+        result_g).wait()
 
-    cl.enqueue_copy(queue, sums_np, sums_g)
-    average_sample_distance = np.sum([s for s in sums_np if s != 0.0]) / num_rows;
-    # breakpoint()
+    cl.enqueue_copy(queue, result_np, result_g)
+    average_sample_distance = np.divide(result_np[0], num_rows);
+    print(average_sample_distance)
+
+    breakpoint()
 
     # ------------------------------------------------------------------
 
