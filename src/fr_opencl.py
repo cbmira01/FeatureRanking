@@ -193,15 +193,17 @@ def get_entropy_opencl(dataset, ctx, program):
     
     # Filter out zero distances
     # OpenCL does not deal well with building variable-length arrays
-    nonzero_sample_distances_np = [sd for sd in sample_distances_np if sd != 0] 
+    sample_distances_np = np.array([sd for sd in sample_distances_np if sd != 0])
     # breakpoint()
 
     # ------------------------------------------------------------------
 
     # average_sample_distance = np.average(sample_distances)
-    
-    num_rows = len(nonzero_sample_distances_np)
-    sums_np = np.empty(int(num_rows/10)*4).astype(np.float32)
+
+    sample_distances_g = cl.Buffer(ctx, mf.READ_WRITE, sample_distances_np.nbytes)
+
+    num_rows = len(sample_distances_np)
+    sums_np = np.empty(num_rows).astype(np.float32)
     sums_g = cl.Buffer(ctx, mf.READ_WRITE, sums_np.nbytes)
 
     program.sum_distances(
@@ -211,13 +213,12 @@ def get_entropy_opencl(dataset, ctx, program):
         sums_g)
 
     cl.enqueue_copy(queue, sums_np, sums_g)
-    average_sample_distance = sums_np[0] / num_rows;
-    print(average_sample_distance)
+    average_sample_distance = np.sum([s for s in sums_np if s != 0.0]) / num_rows;
     breakpoint()
 
     # ------------------------------------------------------------------
 
-    # alpha = np.divide(- np.log(0.5), average_sample_distance)
+    alpha = np.divide(- np.log(0.5), average_sample_distance)
 
     # ------------------------------------------------------------------
 

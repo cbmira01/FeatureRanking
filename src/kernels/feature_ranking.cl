@@ -106,7 +106,7 @@ __kernel void sum_distances(
     const int num_rows, 
     __global float *sums_g)
 {
-    __local float local_workspace[1024];
+    __local float local_workspace[128];
 
     int global_id = get_global_id(0);
     int local_id = get_local_id(0);
@@ -128,18 +128,6 @@ __kernel void sum_distances(
         }
 
         sums_g[group_id] = sum; 
-    }
-
-    barrier(CLK_LOCAL_MEM_FENCE);
-
-    if (global_id == 0) {
-
-        for(i = 1; i < num_rows; i++) {
-            if (sums_g[i] == 0.0f)
-                break;
-
-            sums_g[0] += sums_g[i];
-        }
     }
 } 
 
