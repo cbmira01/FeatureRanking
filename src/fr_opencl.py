@@ -202,7 +202,7 @@ def get_entropy_opencl(dataset, ctx, program):
 
     sample_distances_g = cl.Buffer(ctx, mf.READ_WRITE, sample_distances_np.nbytes)
 
-    num_rows = len(sample_distances_np)
+    num_rows = len(sample_distances_np) # updated num_rows may reflect filtered zeros
     sums_np = np.empty(num_rows).astype(np.float32)
     sums_g = cl.Buffer(ctx, mf.READ_WRITE, sums_np.nbytes)
 
@@ -214,23 +214,40 @@ def get_entropy_opencl(dataset, ctx, program):
 
     cl.enqueue_copy(queue, sums_np, sums_g)
     average_sample_distance = np.sum([s for s in sums_np if s != 0.0]) / num_rows;
-    breakpoint()
+    # breakpoint()
 
     # ------------------------------------------------------------------
 
     alpha = np.divide(- np.log(0.5), average_sample_distance)
+    # breakpoint()
 
     # ------------------------------------------------------------------
 
     # similarities = np.exp(np.multiply(-alpha, sample_distances))
     # dissimilarities = np.subtract(1, similarities)
 
-    # ------------------------------------------------------------------
-
     # pairwise_entropies = np.add(
     # np.multiply(similarities, np.log10(similarities)),
     # np.multiply(dissimilarities, np.log10(dissimilarities))
     # )
+
+    similarities_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty(num_rows).astype(np.float32).nbytes)
+    dissimilarities_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty(num_rows).astype(np.float32).nbytes)
+
+    pairwise_entropies_np = np.empty(num_rows).astype(np.float32)
+    pairwise_entropies_g = cl.Buffer(ctx, mf.READ_WRITE, pairwise_entropies_np.nbytes)
+
+    program.pairwise_entropies(
+        queue, (num_rows,), None, 
+        sample_distances_g, 
+        np.float32(alpha),
+        np.int32(num_rows),
+        similarities_g,
+        dissimilarities_g,
+        pairwise_entropies_g)
+    
+    cl.enqueue_copy(queue, pairwise_entropies_np, pairwise_entropies_g)
+    breakpoint()
 
     # ------------------------------------------------------------------
 

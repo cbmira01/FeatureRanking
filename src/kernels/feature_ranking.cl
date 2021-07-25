@@ -133,11 +133,26 @@ __kernel void sum_distances(
 
 // ---------------------------------------------------------------------
 
-// __kernel void similarities(arguments) { }
+__kernel void pairwise_entropies(
+    __global float *sample_distances_g, 
+    
+    // alpha is a scaling factor to expand very small average sample distances
+    const float alpha, 
 
-// ---------------------------------------------------------------------
+    const int num_rows,
+    __global float *similarities_g,
+    __global float *dissimilarities_g,
+    __global float *pairwise_entropies_g)
+{ 
+    int gid = get_global_id(0);
 
-// __kernel void pairwise_entropies(arguments) { }
+    similarities_g[gid] = exp((-alpha * sample_distances_g[gid]));
+    dissimilarities_g[gid] = 1.0f - similarities_g[gid];
+
+    pairwise_entropies_g[gid] = 
+        (similarities_g[gid] * log10(similarities_g[gid]))
+        + (dissimilarities_g[gid] * log10(dissimilarities_g[gid]));
+}
 
 // ---------------------------------------------------------------------
 
