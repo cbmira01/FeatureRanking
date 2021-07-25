@@ -87,7 +87,7 @@ __kernel void sample_distances(
     __global float *sample_distances_g) 
 { 
     int row = get_global_id(0); // range over rows
-    float sum_squares = 0.0;
+    float sum_squares = 0.0f;
 
     for (int col = 0; col < num_cols; col++) {
         sum_squares = sum_squares + pown(normalized_differences_g[row * num_cols + col], 2);
@@ -98,7 +98,50 @@ __kernel void sample_distances(
 
 // ---------------------------------------------------------------------
 
-//__kernel void sum_distances(){}  
+// Thanks to lecture notes "Introduction to OpenCL" by George Leaver, June 2012 
+// http://wiki.rac.manchester.ac.uk/community/OpenCL?action=AttachFile&do=get&target=IntrotoOpenCL.pdf
+
+__kernel void sum_distances(  
+    __global float *distances_g,
+    const int num_rows, 
+    __global float *sums_g)
+{
+    __local float local_workspace[1024];
+
+    int global_id = get_global_id(0);
+    int local_id = get_local_id(0);
+    int group_id = get_group_id(0);
+    int local_size = get_local_size(0); 
+
+    int i;
+    float sum;
+
+    local_workspace[local_id] = distances_g[global_id];
+
+    barrier(CLK_LOCAL_MEM_FENCE);
+
+    if(local_id == 0) {
+        sum = distances_g[0];
+
+        for(i = 1; i < local_size; i++) {
+            sum = sum + local_workspace[i];
+        }
+
+        sums_g[group_id] = sum; 
+    }
+
+    barrier(CLK_LOCAL_MEM_FENCE);
+
+    if (global_id == 0) {
+
+        for(i = 1; i < num_rows; i++) {
+            if (sums_g[i] == 0.0f)
+                break;
+
+            sums_g[0] += sums_g[i];
+        }
+    }
+} 
 
 // ---------------------------------------------------------------------
 
