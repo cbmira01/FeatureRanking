@@ -3,11 +3,12 @@
 
 ### Requirements
 
-    - This project was built and tested on Windows 10 64-bit, with up-to-date 
+    This project was built and tested on Windows 10 64-bit, with up-to-date 
     CPU and GPU drivers. You'll need at least one OpenCL device discoverable on 
     your workstation, a "recent" version of Anaconda (eg, 2021.05), a Git 
-    client [Git Bash](https://git-scm.com/) available at the Anaconda command line, and a 
-    local directory on your workstation where your code repositories are housed.
+    client [Git Bash](https://git-scm.com/) available at the Anaconda command 
+    line, and a local directory on your workstation where your code repositories
+    are housed.
 
 ### Setup from scratch
 
