@@ -7,6 +7,7 @@ import pyopencl as cl
 import numpy as np
 import sys
 from prep_data import *
+import time
 
 def opencl_device_driver(dataset_info):
 
@@ -43,6 +44,8 @@ def ranking_protocol(dataset_info, device):
     print('Dataset: ', dataset_info['long_name'])
     if (False): # configuration
         print('Label names: ', label_names)
+
+    ranking_start = time.perf_counter()
 
     # Step 1: Start with an initial full set of features (no exclusions).
     instances = len(dataset)
@@ -82,7 +85,7 @@ def ranking_protocol(dataset_info, device):
         #   "least contributing" feature.
         exclude[drop_index] = True
 
-        print('Round', counter, ', dropped', label_names[drop_index], end='')
+        print('   Round', counter, ', dropped', label_names[drop_index], end='')
         print(', remaining entropy', remaining_entropy)
         if (): # configuration
             print('    Entropy differences: ', entropy_differences)
@@ -92,6 +95,9 @@ def ranking_protocol(dataset_info, device):
         counter = counter + 1
         if exclude.count(False) == 0:
             break
+
+    ranking_stop = time.perf_counter()
+    print(f"Ranking completed in {ranking_stop - ranking_start:0.2f} seconds")
 
     return None
 
