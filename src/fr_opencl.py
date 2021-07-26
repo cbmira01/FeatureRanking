@@ -12,7 +12,6 @@ def opencl_device_driver(dataset_info):
 
     for platform in cl.get_platforms():
         for device in platform.get_devices(cl.device_type.ALL):
-            print(device, '\n')
             ranking_protocol(dataset_info, device)
 
     return None
@@ -42,7 +41,8 @@ def ranking_protocol(dataset_info, device):
     print('\n')
     print('Trial on OpenCL device: ', device)
     print('Dataset: ', dataset_info['long_name'])
-    print('Label names: ', label_names)
+    if (False): # configuration
+        print('Label names: ', label_names)
 
     # Step 1: Start with an initial full set of features (no exclusions).
     instances = len(dataset)
@@ -82,9 +82,10 @@ def ranking_protocol(dataset_info, device):
         #   "least contributing" feature.
         exclude[drop_index] = True
 
-        print('\nRound', counter, ', dropped', label_names[drop_index])
-        print('    Remaining entropy:   ', remaining_entropy)
-        print('    Entropy differences: ', entropy_differences)
+        print('Round', counter, ', dropped', label_names[drop_index], end='')
+        print(', remaining entropy', remaining_entropy)
+        if (): # configuration
+            print('    Entropy differences: ', entropy_differences)
         sys.stdout.flush() 
 
         # Step 5: Repeat steps 2–4 until no features remain.
@@ -103,7 +104,7 @@ def get_entropy_opencl(dataset, ctx, program):
 
     features = len(dataset[0])
     instances = len(dataset)
-
+    # breakpoint()
     # ------------------------------------------------------------------
 
     # sample_differences = [
@@ -123,8 +124,8 @@ def get_entropy_opencl(dataset, ctx, program):
         dataset_g, np.int32(features), np.int32(instances), 
         sample_differences_g)
 
-    # cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
-    breakpoint()
+    cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
+    #breakpoint()
 
     # ------------------------------------------------------------------
 
@@ -148,8 +149,8 @@ def get_entropy_opencl(dataset, ctx, program):
         max_values_g,
         value_ranges_g)
 
-    # cl.enqueue_copy(queue, value_ranges_np, value_ranges_g)
-    # breakpoint()
+    cl.enqueue_copy(queue, value_ranges_np, value_ranges_g)
+    #  breakpoint()
 
     # ------------------------------------------------------------------
 
@@ -167,7 +168,7 @@ def get_entropy_opencl(dataset, ctx, program):
         np.int32(num_rows), 
         normalized_differences_g)
 
-    # cl.enqueue_copy(queue, normalized_differences_np, normalized_differences_g)
+    cl.enqueue_copy(queue, normalized_differences_np, normalized_differences_g)
     # breakpoint()
 
     # ------------------------------------------------------------------
@@ -188,7 +189,7 @@ def get_entropy_opencl(dataset, ctx, program):
     cl.enqueue_copy(queue, sample_distances_np, sample_distances_g)
 
     # Filter out zero distances; OpenCL does not build variable-length arrays
-    sample_distances_np = np.array([sd for sd in sample_distances_np if sd != 0])
+    nonzero_sample_distances_np = np.array([sd for sd in sample_distances_np if sd != 0])
 
     # ------------------------------------------------------------------
 
@@ -230,6 +231,9 @@ def get_entropy_opencl(dataset, ctx, program):
     # np.multiply(dissimilarities, np.log10(dissimilarities))
     # )
 
+    num_rows = len(nonzero_sample_distances_np)
+    nonzero_sample_distances_g = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=nonzero_sample_distances_np)
+
     similarities_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty(num_rows).astype(np.float32).nbytes)
     dissimilarities_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty(num_rows).astype(np.float32).nbytes)
 
@@ -238,7 +242,7 @@ def get_entropy_opencl(dataset, ctx, program):
 
     program.pairwise_entropies(
         queue, (num_rows,), None, 
-        sample_distances_g, 
+        nonzero_sample_distances_g, 
         np.float32(alpha),
         np.int32(num_rows),
         similarities_g,
@@ -252,6 +256,7 @@ def get_entropy_opencl(dataset, ctx, program):
 
     # entropy = - np.sum(pairwise_entropies)
     entropy = - np.sum(pairwise_entropies_np)
+    # breakpoint()
 
     return entropy
 

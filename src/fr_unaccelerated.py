@@ -20,8 +20,10 @@ def ranking_protocol(dataset_info):
     dataset = get_clean_data(dataset_info, dump=False)
     label_names = get_label_names(dataset_info)
     print('\n')
+    print('Trial on unaccelerated CPU')
     print('Dataset: ', dataset_info['long_name'])
-    print('Label names: ', label_names)
+    if (False): # configuration
+        print('Label names: ', label_names)
 
     # Step 1: Start with an initial full set of features (no exclusions).
     instances = len(dataset)
@@ -61,9 +63,10 @@ def ranking_protocol(dataset_info):
         #   "least contributing" feature.
         exclude[drop_index] = True
 
-        print('\nRound', counter, ', dropped', label_names[drop_index])
-        print('    Remaining entropy:   ', remaining_entropy)
-        print('    Entropy differences: ', entropy_differences)
+        print('Round', counter, ', dropped', label_names[drop_index], end='')
+        print(', remaining entropy', remaining_entropy)
+        if (): # configuration
+            print('    Entropy differences: ', entropy_differences)
         sys.stdout.flush() 
 
         # Step 5: Repeat steps 2–4 until no features remain.
