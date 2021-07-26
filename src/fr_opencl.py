@@ -190,35 +190,37 @@ def get_entropy_opencl(dataset, ctx, program):
         sample_distances_g)
 
     cl.enqueue_copy(queue, sample_distances_np, sample_distances_g)
-    
-    # Filter out zero distances
-    # OpenCL does not deal well with building variable-length arrays
+
+    # Filter out zero distances; OpenCL does not build variable-length arrays
     sample_distances_np = np.array([sd for sd in sample_distances_np if sd != 0])
-    # breakpoint()
 
     # ------------------------------------------------------------------
 
     # average_sample_distance = np.average(sample_distances)
 
-    sample_distances_g = cl.Buffer(ctx, mf.READ_WRITE, sample_distances_np.nbytes)
+    bite_size = 128 # this should be derived from device properties
+    padded_distances_np = pad_for_sum(sample_distances_np, bite_size)
+    padded_distances_g = cl.Buffer(ctx, mf.READ_WRITE, padded_distances_np.nbytes)
+    num_rows = len(padded_distances_np)
 
-    num_rows = len(sample_distances_np)
-    partials_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty([num_rows]).astype(np.float32).nbytes)
+    partials_np = np.empty([num_rows//bite_size]).astype(np.float32)
+    partials_g = cl.Buffer(ctx, mf.READ_WRITE, partials_np.nbytes)
 
-    result_np = np.empty([1]).astype(np.float32)
+    result_np = np.empty([4]).astype(np.float32)
     result_g = cl.Buffer(ctx, mf.READ_WRITE, result_np.nbytes)
 
     program.sum_array(
         queue, (num_rows,), None, 
-        sample_distances_g, 
+        padded_distances_g, 
         np.int32(num_rows),
         partials_g,
-        result_g).wait()
+        result_g)
 
     cl.enqueue_copy(queue, result_np, result_g)
-    average_sample_distance = np.divide(result_np[0], num_rows);
-    print(average_sample_distance)
+    average_sample_distance = np.divide(result_np[0], len(sample_distances_np));
 
+    cl.enqueue_copy(queue, partials_np, partials_g)
+    print(result_np[0], average_sample_distance)
     breakpoint()
 
     # ------------------------------------------------------------------
@@ -259,6 +261,16 @@ def get_entropy_opencl(dataset, ctx, program):
     # entropy = - np.sum(pairwise_entropies)
 
     return None
+
+
+def pad_for_sum(arr, wgs):
+    # This function is needed to facilitate efficient summing of arrays
+    # wgs is work-group size, should be a power of two
+
+    leftover = np.remainder(len(arr), wgs)
+    zeros = np.zeros(wgs - leftover, dtype=arr.dtype)
+    arr = np.concatenate([arr, zeros])
+    return arr
 
 
 if __name__ == '__main__':
