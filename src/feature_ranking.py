@@ -5,8 +5,10 @@
 #
 
 import sys
-from trial_run import *
+# from trial_run import *
 from prep_data import *
+import fr_opencl
+import fr_unaccelerated 
 
 
 def list_datasets():
@@ -45,8 +47,8 @@ def describe_datasets():
     return None
 
 
-def run_a_trial():
-    print('\nRun a trial on one of the following datasets: \n')
+def run_trials():
+    print('\nRun trials on one of the following datasets: \n')
 
     for ds in datasets_list:
         print(ds['short_name'], '  ', end='')
@@ -55,7 +57,8 @@ def run_a_trial():
     ds_info = next((d for d in datasets_list if d['short_name'] == ds_name), None)
 
     if ds_info is not None:
-        run_and_log_trial(ds_info)
+        fr_opencl.opencl_device_driver(ds_info)
+        fr_unaccelerated.ranking_protocol(ds_info)
 
     return None
 
@@ -71,7 +74,7 @@ def switch_on(c):
         'list': list_datasets,
         'describe': describe_datasets,
         'credits': list_datasets_with_credits,
-        'trial': run_a_trial,
+        'trial': run_trials,
         'exit': exit_program
     }
     return switcher.get(c, lambda: 'Invalid')()
@@ -84,11 +87,11 @@ while True:
     print('\n')
     print('FEATURE RANKING main menu')
     print()
-    print('list ------ List available datasets')
-    print('describe -- Describe available datasets')
-    print('credits --- List datasets with credits')
-    print('trial ----- Run feature ranking trials on a dataset')
-    print('exit ------ Exit')
+    print('   list ------ List available datasets')
+    print('   describe -- Describe available datasets')
+    print('   credits --- List datasets with credits')
+    print('   trial ----- Run feature ranking trials on a dataset')
+    print('   exit ------ Exit')
     print()
 
     switch_on(input('Choice? ').lower())
