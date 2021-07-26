@@ -70,16 +70,16 @@ This project fullfills the following project requirements for Code Louisville:
 
 - Implements a “master loop” console application where the user can repeatedly 
 enter commands/perform actions. This can be seen in script 
-<p align="center">./src/feature_ranking.py</p>, near lines 72 and 86
+<p align="center">./src/feature_ranking.py, near lines 72 and 86 </p>
 
 - Creates and uses a dictionary or list. This can be seen in script 
-<p align="center">./src/prep_data.py</p>, near line 11
+<p align="center">./src/prep_data.py, near line 11 </p>
 
 - Reads data from external JSON and CSV files. This can be seen in script 
-<p align="center">./src/prep_data.py</p>, near lines 11 and 46
+<p align="center">./src/prep_data.py, near lines 11 and 46 </p>
 
 - Function calls that return values are used throughout, such as in scripts
-<p align="center">./src/fr_opencl.py</p>, near lines 105 and 268
-<p align="center">./src/feature_ranking.py</p>, near line 72
+<p align="center">./src/fr_opencl.py, near lines 105 and 268</p>
+<p align="center">./src/feature_ranking.py, near line 72</p>
 
 - Implements a "stretch" goal: setup and testing of the OpenCL framework.
