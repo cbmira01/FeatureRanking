@@ -6,7 +6,7 @@
     This project was built and tested on Windows 10 64-bit, with up-to-date 
     CPU and GPU drivers. You'll need at least one OpenCL device discoverable on 
     your workstation, a "recent" version of Anaconda (eg, 2021.05), a Git 
-    client [Git Bash](https://git-scm.com/) available at the Anaconda command 
+    client like [Git Bash](https://git-scm.com) available at the Anaconda command 
     line, and a local directory on your workstation where your code repositories
     are housed.
 
@@ -18,7 +18,7 @@
           cd C:\Users\your-user-name\...\your-local-repos>
 
     - Clone the FeatureRanking project GitHub repository:
-          git clone [FeatureRanking repo](https://github.com/cbmira01/FeatureRanking)
+          git clone https://github.com/cbmira01/FeatureRanking
 
     - Change to the FeatureRanking project root directory:
           cd .\FeatureRanking
