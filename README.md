@@ -50,7 +50,7 @@ are housed.
 - Run the main program: 
       <p align="center">python feature_ranking.py</p> 
 
-More information on setup is available in 
+- More information on setup is available in 
 <p align="center">./doc/INSTRUCTIONS.md</p> 
 
 ## More information
