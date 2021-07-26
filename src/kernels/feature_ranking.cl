@@ -98,42 +98,42 @@ __kernel void sample_distances(
 
 // ---------------------------------------------------------------------
 
+
 // Thanks to lecture notes "Introduction to OpenCL" by George Leaver, June 2012 
 // http://wiki.rac.manchester.ac.uk/community/OpenCL?action=AttachFile&do=get&target=IntrotoOpenCL.pdf
 
 __kernel void sum_array( 
-    __global float *input_g, // assuming len(input_g) is a power of two
-    const uint num_rows, 
+    __global const float *input_g, // assuming len(input_g) is a power of two
+    const int num_rows, 
     __global float *partial_sums_g,
     __global float *result_g)
 { 
     __local float local_sums[128];
 
-    uint global_id = get_global_id(0);
-    uint global_size = get_global_size(0);
-    uint local_id = get_local_id(0);
-    uint group_size = get_local_size(0);
+    int global_id = get_global_id(0);
+    int local_id = get_local_id(0);
+    int group_id = get_group_id(0);
+    int group_size = get_local_size(0);
 
     local_sums[local_id] = input_g[global_id];
 
-    for(uint stride = group_size / 2; stride > 0; stride /= 2) { 
-
-        barrier(CLK_LOCAL_MEM_FENCE);
+    for(int stride = group_size / 2; stride > 1; stride /= 2) { 
+        barrier(CLK_GLOBAL_MEM_FENCE | CLK_LOCAL_MEM_FENCE);
 
         if(local_id < stride)
             local_sums[local_id] += local_sums[local_id + stride];
     } 
 
-    if(local_id == 0)
-        partial_sums_g[get_group_id(0)] = local_sums[0];
+    if(local_id == 0) {
+        partial_sums_g[group_id] = local_sums[0];
+    }
 
     // Reduce the partial sums
-    barrier(CLK_GLOBAL_MEM_FENCE);
-
     float sum;
+
     if(local_id == 0) {
         sum = partial_sums_g[0];
-        for(uint i = 1; i <  get_num_groups(0); i++)
+        for(int i = 1; i <  get_num_groups(0); i++)
             sum += partial_sums_g[i];
 
         result_g[0] = sum; 
@@ -165,8 +165,4 @@ __kernel void pairwise_entropies(
         (similarities_g[gid] * log10(similarities_g[gid]))
         + (dissimilarities_g[gid] * log10(dissimilarities_g[gid]));
 }
-
-// ---------------------------------------------------------------------
-
-// __kernel void entropy(arguments) { }
 

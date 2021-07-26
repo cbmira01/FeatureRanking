@@ -20,7 +20,7 @@ def opencl_device_driver(dataset_info):
 
 def ranking_protocol(dataset_info, device):
 
-    # Prepare the context, command queue and program  for the current device
+    # Prepare the context, command queue and program for the current device
     context = cl.Context([device])
 
     try: 
@@ -44,10 +44,6 @@ def ranking_protocol(dataset_info, device):
     print('Dataset: ', dataset_info['long_name'])
     print('Label names: ', label_names)
 
-    # for now, call entropy calculation here
-    get_entropy_opencl(dataset, context, program)
-    sys.exit()
-
     # Step 1: Start with an initial full set of features (no exclusions).
     instances = len(dataset)
     features = len(dataset[0])
@@ -61,7 +57,7 @@ def ranking_protocol(dataset_info, device):
         for row in dataset:
             remaining_dataset.append([row[k] for k in range(features) if not exclude[k]])
 
-        remaining_entropy = get_entropy(remaining_dataset)
+        remaining_entropy = get_entropy_opencl(remaining_dataset, context, program)
 
         # Step 2b: Find the entropies of each non-excluded feature.
         columns = np.array(dataset).transpose().tolist()
@@ -73,7 +69,7 @@ def ranking_protocol(dataset_info, device):
                 feature_entropies.append(None)
                 entropy_differences.append(float('inf')) # force no test here
             else:
-                fe = get_entropy([[c] for c in columns[k]])
+                fe = get_entropy_opencl([[c] for c in columns[k]], context, program)
                 feature_entropies.append(fe)
                 ed = np.absolute(np.subtract(remaining_entropy, fe))
                 entropy_differences.append(ed)
@@ -128,7 +124,7 @@ def get_entropy_opencl(dataset, ctx, program):
         sample_differences_g)
 
     # cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
-    # breakpoint()
+    breakpoint()
 
     # ------------------------------------------------------------------
 
@@ -197,31 +193,27 @@ def get_entropy_opencl(dataset, ctx, program):
     # ------------------------------------------------------------------
 
     # average_sample_distance = np.average(sample_distances)
+    average_sample_distance = np.average(sample_distances_np)
 
-    bite_size = 128 # this should be derived from device properties
-    padded_distances_np = pad_for_sum(sample_distances_np, bite_size)
-    padded_distances_g = cl.Buffer(ctx, mf.READ_WRITE, padded_distances_np.nbytes)
-    num_rows = len(padded_distances_np)
+    # bite_size = 128 # this should be derived from device properties
+    # padded_distances_np = pad_for_sum(sample_distances_np, bite_size)
+    # padded_distances_g = cl.Buffer(ctx, mf.READ_WRITE, padded_distances_np.nbytes)
+    # num_rows = len(padded_distances_np)
 
-    partials_np = np.empty([num_rows//bite_size]).astype(np.float32)
-    partials_g = cl.Buffer(ctx, mf.READ_WRITE, partials_np.nbytes)
+    # partials_np = np.empty([num_rows//bite_size]).astype(np.float32)
+    # partials_g = cl.Buffer(ctx, mf.READ_WRITE, partials_np.nbytes)
 
-    result_np = np.empty([4]).astype(np.float32)
-    result_g = cl.Buffer(ctx, mf.READ_WRITE, result_np.nbytes)
+    # result_np = np.empty([4]).astype(np.float32)
+    # result_g = cl.Buffer(ctx, mf.READ_WRITE, result_np.nbytes)
 
-    program.sum_array(
-        queue, (num_rows,), None, 
-        padded_distances_g, 
-        np.int32(num_rows),
-        partials_g,
-        result_g)
+    # program.sum_array(queue, (num_rows,), None, padded_distances_g, np.int32(num_rows), partials_g, result_g)
 
-    cl.enqueue_copy(queue, result_np, result_g)
-    average_sample_distance = np.divide(result_np[0], len(sample_distances_np));
+    # cl.enqueue_copy(queue, result_np, result_g)
+    # average_sample_distance = np.divide(result_np[0], len(sample_distances_np));
 
-    cl.enqueue_copy(queue, partials_np, partials_g)
-    print(result_np[0], average_sample_distance)
-    breakpoint()
+    # cl.enqueue_copy(queue, partials_np, partials_g)
+    # print(result_np, 'avg = ', average_sample_distance)
+    # breakpoint()
 
     # ------------------------------------------------------------------
 
@@ -254,13 +246,14 @@ def get_entropy_opencl(dataset, ctx, program):
         pairwise_entropies_g)
     
     cl.enqueue_copy(queue, pairwise_entropies_np, pairwise_entropies_g)
-    breakpoint()
+    # breakpoint()
 
     # ------------------------------------------------------------------
 
     # entropy = - np.sum(pairwise_entropies)
+    entropy = - np.sum(pairwise_entropies_np)
 
-    return None
+    return entropy
 
 
 def pad_for_sum(arr, wgs):
