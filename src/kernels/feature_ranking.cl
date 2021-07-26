@@ -102,6 +102,8 @@ __kernel void sample_distances(
 // Thanks to lecture notes "Introduction to OpenCL" by George Leaver, June 2012 
 // http://wiki.rac.manchester.ac.uk/community/OpenCL?action=AttachFile&do=get&target=IntrotoOpenCL.pdf
 
+// This section needs work, I'm not sure how to understand it
+
 __kernel void sum_array( 
     __global const float *input_g, // assuming len(input_g) is a power of two
     const int num_rows, 
@@ -128,7 +130,7 @@ __kernel void sum_array(
         partial_sums_g[group_id] = local_sums[0];
     }
 
-    // Reduce the partial sums
+    // Reduce partial sums on the OpenCL device
     float sum;
 
     if(local_id == 0) {

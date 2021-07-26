@@ -87,7 +87,7 @@ def ranking_protocol(dataset_info, device):
 
         print('   Round', counter, ', dropped', label_names[drop_index], end='')
         print(', remaining entropy', remaining_entropy)
-        if (): # configuration
+        if (False): # configuration
             print('    Entropy differences: ', entropy_differences)
         sys.stdout.flush() 
 
@@ -110,7 +110,7 @@ def get_entropy_opencl(dataset, ctx, program):
 
     features = len(dataset[0])
     instances = len(dataset)
-    # breakpoint()
+
     # ------------------------------------------------------------------
 
     # sample_differences = [
@@ -130,8 +130,7 @@ def get_entropy_opencl(dataset, ctx, program):
         dataset_g, np.int32(features), np.int32(instances), 
         sample_differences_g)
 
-    cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
-    #breakpoint()
+    # cl.enqueue_copy(queue, sample_differences_np, sample_differences_g)
 
     # ------------------------------------------------------------------
 
@@ -155,8 +154,7 @@ def get_entropy_opencl(dataset, ctx, program):
         max_values_g,
         value_ranges_g)
 
-    cl.enqueue_copy(queue, value_ranges_np, value_ranges_g)
-    #  breakpoint()
+    # cl.enqueue_copy(queue, value_ranges_np, value_ranges_g)
 
     # ------------------------------------------------------------------
 
@@ -174,8 +172,7 @@ def get_entropy_opencl(dataset, ctx, program):
         np.int32(num_rows), 
         normalized_differences_g)
 
-    cl.enqueue_copy(queue, normalized_differences_np, normalized_differences_g)
-    # breakpoint()
+    # cl.enqueue_copy(queue, normalized_differences_np, normalized_differences_g)
 
     # ------------------------------------------------------------------
 
@@ -200,6 +197,8 @@ def get_entropy_opencl(dataset, ctx, program):
     # ------------------------------------------------------------------
 
     # average_sample_distance = np.average(sample_distances)
+
+    # Figure out how to do this reduction on the OpenCL device
     average_sample_distance = np.average(sample_distances_np)
 
     # bite_size = 128 # this should be derived from device properties
@@ -225,7 +224,6 @@ def get_entropy_opencl(dataset, ctx, program):
     # ------------------------------------------------------------------
 
     alpha = np.divide(- np.log(0.5), average_sample_distance)
-    # breakpoint()
 
     # ------------------------------------------------------------------
 
@@ -256,13 +254,13 @@ def get_entropy_opencl(dataset, ctx, program):
         pairwise_entropies_g)
     
     cl.enqueue_copy(queue, pairwise_entropies_np, pairwise_entropies_g)
-    # breakpoint()
 
     # ------------------------------------------------------------------
 
     # entropy = - np.sum(pairwise_entropies)
+
+    # Figure out how to do this reduction on the OpenCL device
     entropy = - np.sum(pairwise_entropies_np)
-    # breakpoint()
 
     return entropy
 

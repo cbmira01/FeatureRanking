@@ -67,7 +67,7 @@ def ranking_protocol(dataset_info):
 
         print('   Round', counter, ', dropped', label_names[drop_index], end='')
         print(', remaining entropy', remaining_entropy)
-        if (): # configuration
+        if (False): # configuration
             print('    Entropy differences: ', entropy_differences)
         sys.stdout.flush() 
 
