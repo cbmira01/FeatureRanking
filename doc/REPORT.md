@@ -66,7 +66,7 @@ Hamming distance or string distance metrics are other ways to establish distance
 This step is computationally expensive in that it creates an upper-triangular 
 structure from the matrix of pair-wise comparisons. For 10 dataset samples, 
 45 comparisons are created; 100 samples would create nearly 5000 comparisons; 
-1000 samples (as in the "German" dataset) create nealy a half-million comparisons;
+1000 samples (as in the "German" dataset) create nealy a half-million comparisons.
 And the "Cardio" dataset, at 2126 samples, creates well over two million 
 comparisons. This step is greatly aided by parallel computation.
 
@@ -98,12 +98,12 @@ operation, and is easily implemented in OpenCL.
 
 ### Entropy measure
 
-The entropy measure of a dataset, or a feature of a dataset, is a measure of
-in some sense the amount of "information" or "surprise" or "effort required to
+The entropy measure of a dataset, or a feature of a dataset, is a measure of,
+in some sense, the amount of "information" or "surprise" or "effort required to
 explain" embedded in the data. When features are compared with each other 
-round-robin, the feature with the lowest entropy with respect to the dataset
-is selected for removal. This process continues until all features are ranked
-from the "least surprising" to the most.
+round-robin, the feature with the lowest entropy with respect to the entirety of
+the dataset is selected for removal. This process continues until all features 
+are ranked from the "least surprising" to the most.
 
 ![equation](https://latex.codecogs.com/svg.image?E&space;=&space;-\sum_{i=1}^{N-1}&space;\sum_{j=i&plus;1}^{N}(S_i_j&space;*&space;log(S_i_j)&space;&plus;&space;(1-S_i_j)&space;*&space;log(1-S_i_j)))
 
