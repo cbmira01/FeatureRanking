@@ -145,7 +145,8 @@ The "German" and "Cardio" datasets are the largest datasets currently used in
 this project, and present the most challenge to a workstation's capacity to solve 
 this problem.
 
-    "German" feature ranking runtimes on some selected platforms:
+    "German" feature ranking runtimes on some selected platforms. These figures
+    need to be revisted as improvements are made.
 
     - Lenovo 7033HH9 Desktop
         CPU: Intel(R) Core(TM) i5-2400 3.10GHz, 4 Logical Processors
@@ -165,7 +166,7 @@ this problem.
         GPU: Intel(R) OpenCL HD Graphics / Intel(R) HD Graphics 630
             311.93 secs
         UNACCELERATED (NumPy)
-            ? secs
+            1389.56 secs
 
     - Dell Precision T5600 Desktop
         CPU: Intel(R) Xeon(R) E5-2603 1.80GHz, 4 Logical Processors
@@ -173,7 +174,7 @@ this problem.
         GPU: NVIDIA CUDA / NVS 300 (two installed)
             992.94 secs
         UNACCELERATED (NumPy)
-            ? secs
+            4734.83 secs
 
 ## Lessons learned
 
