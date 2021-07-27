@@ -119,26 +119,47 @@ problem. Presented are some trial run timings.
 
 Work in progress... "Cardio" runtimes on devices...
 
-- Lenovo 7033HH9
-  Intel(R) Core(TM) i5-2400 CPU @ 3.10GHz, 3101 Mhz, 4 Cores
+- Lenovo 7033HH9 Desktop
+    CPU: Intel(R) Core(TM) i5-2400 CPU @ 3.10GHz, 3101 Mhz, 4 Logical Processors
+    GPU:
+    GPU:
 
-- Dell laptop
+- Dell Precision 3520 Laptop
+    CPU: Intel(R) Core(TM) i7-7700HQ 2.80GHz, 8 Logical Processors
+    GPU: NVIDIA CUDA / Quadro M620
+    GPU: Intel(R) OpenCL HD Graphics / Intel(R) HD Graphics 630
 
-- Dell desktop
+- Dell Precision T5600 Desktop
+    CPU: Intel(R) Xeon(R) E5-2603 1.80GHz, 4 Logical Processors
+    GPU: NVIDIA CUDA / NVS 300 (two installed)
+
 
 ## Lessons learned
 
 Work in progress...
 
+- data first; data movement is explicit
+- how to think in threads
+- essentially map/filter/reduce
+- difficult to debug
+- keep decision points to a minimum
+
+Things to do...
+
 - memoize min/max/value_ranges
+- apply reduction methods to min/max (increase thread count)
 - do a better job with sum_array!
-- do a better job with sample_distances zero filtering
+- on-device sample_distances zero filtering (deal with variable-length arrays)
 - fix calculation of average (need sum_array to work)
 - fix sum of pairwise entropies (need sum_array to work)
-- refactor round-driver code (needs to be in common)
+- refactor round-driver code (it's the same body of code)
 - refactor OpenCL context/compile out of round driver
 - minimize data moves to/from OpenCL devices
 - minimize intermediate work in global memory (global --> local --> global)
+- how to make a multi-device execution contexts?
+- how to launch non-blocking kernels?
+- get execution profile information?
+- look at kernel double-precision floats (cl_khr_fp64 option)
 - find out how to release kernels and buffers in PyOpenCL
 - make the OpenCL and Python host code easier to read, less grindy
 

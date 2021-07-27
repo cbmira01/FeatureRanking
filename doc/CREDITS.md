@@ -1,26 +1,57 @@
 
-## The following sources were consulted for this project
+## These resources were consulted for this project
 
-### The OpenCL Project
-    - Go to [this link](https://en.wikipedia.org)
+### Books and manuals
 
-### The PyOpenCL Project
-    - Go to [this link](https://en.wikipedia.org)
+- Kantardzic, M. 2011 "Data mining : concepts, models, methods, and algorithms – 2nd ed."
+    Institute of Electrical and Electronics Engineers
+    Published by John Wiley & Sons, Inc., Hoboken NJ
 
-### UCI Machine Learning
-    - Go to [this link](https://en.wikipedia.org)
+- Scarpino, M. 2012 "OpenCL in Action"
+    Manning Publications Co., Shelter Island NY 
 
-### Textbook
-    - Go to [this link](https://en.wikipedia.org)
+- [PyOpenCL 2021.2.6 documentation](https://documen.tician.de/pyopencl/index.html)
+- [AMD, "Introduction to OpenCL Programming", 2010](https://www.site.uottawa.ca/~mbolic/ceg4131/AMD-Introduction%20to%20OpenCL%20Programming%20(1).pdf)
+- [AMD, "OpenCL Programming Guide", 2013](http://developer.amd.com/wordpress/media/2013/07/AMD_Accelerated_Parallel_Processing_OCL_Programming_Guide-2013-06-21.pdf)
+- [nVidia, "OpenCL Best Practices Guide, v 1.0", 2009](https://www.nvidia.com/content/cudazone/CUDABrowser/downloads/papers/NVIDIA_OpenCL_BestPracticesGuide.pdf)
 
-### Other works consulted
-    - Go to [this link](https://en.wikipedia.org)
-    - Go to [this link](https://en.wikipedia.org)
-    - Go to [this link](https://en.wikipedia.org)
-    - Go to [this link](https://en.wikipedia.org)
-    - Go to [this link](https://en.wikipedia.org)
-    - Go to [this link](https://en.wikipedia.org)
-    - Go to [this link](https://en.wikipedia.org)
-    - Go to [this link](https://en.wikipedia.org)
-    - Go to [this link](https://en.wikipedia.org)
-    - Go to [this link](https://en.wikipedia.org)
+- [Khronos OpenCL Working Group, "OpenCL Specification 1.2", 2012](https://www.khronos.org/registry/OpenCL/specs/opencl-1.2.pdf)
+- [Khronos OpenCL Working Group, "OpenCL 1.2 Reference Pages"](https://www.khronos.org/registry/OpenCL/sdk/1.2/docs/man/xhtml/)
+- [Khronos OpenCL Working Group, "OpenCL API 1.2 Reference Card"](https://www.khronos.org/registry/OpenCL/sdk/1.2/docs/OpenCL-1.2-refcard.pdf)
+- [Khronos OpenCL Working Group, "OpenCL C++ Wrapper 1.2 Reference Card"](https://www.khronos.org/files/OpenCLPP12-reference-card.pdf)
+
+- [Conda User Guide](https://conda.io/projects/conda/en/latest/user-guide/index.html)
+- [NumPy Documentation](https://numpy.org/doc/1.20/contents.html)
+
+### Lecture notes
+
+- [Klockner, PyOpenCL Tutorial, 2014](https://tiker.net/tmp/3eagpgpu/pyopencl-slides.pdf)
+- [Beckmann, "OpenCL Parallel Reduction", 2017](https://www.fz-juelich.de/SharedDocs/Downloads/IAS/JSC/EN/slides/opencl/opencl-05-reduction.pdf?__blob=publicationFile)
+- [Markham, "Parallel Reduction in OpenCL", 2018](https://gmarkham.com/2018-04-12-parallel-reduction-in-opencl/)
+- [Leaver, "Introduction to OpenCL", 2012](http://wiki.rac.manchester.ac.uk/community/OpenCL?action=AttachFile&do=get&target=IntrotoOpenCL.pdf)
+
+### Software repos
+
+- [Unofficial Windows Binaries for Python Extension Packages](https://www.lfd.uci.edu/~gohlke/pythonlibs/)
+- [Sture, pyopencl-in-action](https://github.com/oysstu/pyopencl-in-action)
+- [PyOpenCL examples](https://github.com/inducer/pyopencl/tree/main/examples)
+
+### Blogs and StackOverflow
+
+- [McIntosh-Smith, Hands On OpenCL](https://handsonopencl.github.io/)
+- [How to install pre-compiled PyOpenCL wheels](https://stackoverflow.com/a/53821714)
+- [Get Your System Information – Using Python Script](https://www.geeksforgeeks.org/get-your-system-information-using-python-script/)
+- [Upper-triangular addressing scheme](https://math.stackexchange.com/a/646125)
+
+### Datasets
+
+- [xxxx](zzzz)
+- [xxxx](zzzz)
+- [xxxx](zzzz)
+- [xxxx](zzzz)
+- [xxxx](zzzz)
+- [xxxx](zzzz)
+- [xxxx](zzzz)
+- [xxxx](zzzz)
+
+
