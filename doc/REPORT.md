@@ -40,7 +40,7 @@ space.
 
 ## Experimental approach
 
-This project implements the entropy measur algorithm once in the NumPy dialect, 
+This project implements the entropy measure algorithm once in the NumPy dialect, 
 and again in the OpenCL dialect. These implementations are run against each other 
 on realistic machine learning datasets, and timing information is presented. A
 menu lets a user view and select datasets for trial.
