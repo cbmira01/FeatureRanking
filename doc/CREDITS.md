@@ -1,13 +1,15 @@
 
-## These resources were consulted for this project
+## Resources consulted for this project
 
 ### Books and manuals
 
-- Kantardzic, M. 2011 "Data mining : concepts, models, methods, and algorithms – 2nd ed."
-Institute of Electrical and Electronics Engineers
-Published by John Wiley & Sons, Inc., Hoboken NJ
-- Scarpino, M. 2012 "OpenCL in Action"
-Manning Publications Co., Shelter Island NY 
+Kantardzic, M. 2011 "Data mining : concepts, models, methods, and algorithms – 2nd ed."
+    Institute of Electrical and Electronics Engineers
+    Published by John Wiley & Sons, Inc., Hoboken NJ
+
+Scarpino, M. 2012 "OpenCL in Action"
+    Manning Publications Co., Shelter Island NY 
+
 - [PyOpenCL 2021.2.6 documentation](https://documen.tician.de/pyopencl/index.html)
 - [AMD, "Introduction to OpenCL Programming", 2010](https://www.site.uottawa.ca/~mbolic/ceg4131/AMD-Introduction%20to%20OpenCL%20Programming%20(1).pdf)
 - [AMD, "OpenCL Programming Guide", 2013](http://developer.amd.com/wordpress/media/2013/07/AMD_Accelerated_Parallel_Processing_OCL_Programming_Guide-2013-06-21.pdf)
