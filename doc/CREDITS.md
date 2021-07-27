@@ -31,6 +31,7 @@ Manning Publications Co., Shelter Island NY
 - [Unofficial Windows Binaries for Python Extension Packages](https://www.lfd.uci.edu/~gohlke/pythonlibs/)
 - [Sture, pyopencl-in-action](https://github.com/oysstu/pyopencl-in-action)
 - [PyOpenCL examples](https://github.com/inducer/pyopencl/tree/main/examples)
+- [Nemmen, OpenCL-examples](https://github.com/rsnemmen/OpenCL-examples)
 
 ### Blogs and StackOverflow
 
@@ -38,16 +39,39 @@ Manning Publications Co., Shelter Island NY
 - [How to install pre-compiled PyOpenCL wheels](https://stackoverflow.com/a/53821714)
 - [Get Your System Information – Using Python Script](https://www.geeksforgeeks.org/get-your-system-information-using-python-script/)
 - [Upper-triangular addressing scheme](https://math.stackexchange.com/a/646125)
+- [TechPowerUp, "GPU Specs Database"](https://www.techpowerup.com/gpu-specs/)
+- [nVidia, "OpenCL SDK Code Samples"](https://developer.nvidia.com/opencl)
+- [Intel, "SDK Code Samples"](https://software.intel.com/content/www/us/en/develop/tools/opencl-sdk/training.html#codesamples)
+
 
 ### Datasets
 
-- [xxxx](zzzz)
-- [xxxx](zzzz)
-- [xxxx](zzzz)
-- [xxxx](zzzz)
-- [xxxx](zzzz)
-- [xxxx](zzzz)
-- [xxxx](zzzz)
-- [xxxx](zzzz)
+[UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/citation_policy.html)
 
+UCI Machine Learning Repository Citation Policy:
+If you publish material based on databases obtained from this repository, 
+then, in your acknowledgements, please note the assistance you received by using 
+this repository. This will help others to obtain the same data sets and replicate 
+your experiments. We suggest the following pseudo-APA reference format for 
+referring to this repository:
 
+Dua, D. and Graff, C. (2019). 
+UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. 
+Irvine, CA: University of California, School of Information and Computer Science.
+
+BiBTeX citation:
+    @misc{Dua:2019 ,
+    author = "Dua, Dheeru and Graff, Casey",
+    year = "2017",
+    title = "{UCI} Machine Learning Repository",
+    url = "http://archive.ics.uci.edu/ml",
+    institution = "University of California, Irvine, School of Information and Computer Sciences" }
+
+A few data sets have additional citation requests. These requests can be found 
+on the bottom of each data set's web page. 
+
+- [Wine Data Set](https://archive.ics.uci.edu/ml/datasets/wine)
+- [Breast Cancer Wisconsin (Prognostic) Data Set](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Prognostic))
+- [Glass Identification Data Set](https://archive.ics.uci.edu/ml/datasets/glass+identification)
+- [Statlog (German Credit Data) Data Set](https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data))
+- [Cardiotocography Data Set](https://archive.ics.uci.edu/ml/datasets/cardiotocography)
