@@ -145,31 +145,29 @@ The "German" and "Cardio" datasets are the largest datasets currently used in
 this project, and present the most challenge to a workstation's capacity to solve 
 this problem.
 
-Work in progress... 
-
 "German" feature ranking runtimes on some selected platforms:
 
-Lenovo 7033HH9 Desktop
-    CPU: Intel(R) Core(TM) i5-2400 CPU @ 3.10GHz, 3101 Mhz, 4 Logical Processors
-        xxxx secs
-    GPU:
-        xxxx secs
-    GPU:
-        xxxx secs
+    - Lenovo 7033HH9 Desktop
+        CPU: Intel(R) Core(TM) i5-2400 CPU @ 3.10GHz, 3101 Mhz, 4 Logical Processors
+            xxxx secs
+        GPU:
+            xxxx secs
+        GPU:
+            xxxx secs
 
-Dell Precision 3520 Laptop
-    CPU: Intel(R) Core(TM) i7-7700HQ 2.80GHz, 8 Logical Processors
-        xxxx secs
-    GPU: NVIDIA CUDA / Quadro M620
-        xxxx secs
-    GPU: Intel(R) OpenCL HD Graphics / Intel(R) HD Graphics 630
-        xxxx secs
+    - Dell Precision 3520 Laptop
+        CPU: Intel(R) Core(TM) i7-7700HQ 2.80GHz, 8 Logical Processors
+            xxxx secs
+        GPU: NVIDIA CUDA / Quadro M620
+            xxxx secs
+        GPU: Intel(R) OpenCL HD Graphics / Intel(R) HD Graphics 630
+            xxxx secs
 
-Dell Precision T5600 Desktop
-    CPU: Intel(R) Xeon(R) E5-2603 1.80GHz, 4 Logical Processors
-        xxxx secs
-    GPU: NVIDIA CUDA / NVS 300 (two installed)
-        xxxx secs
+    - Dell Precision T5600 Desktop
+        CPU: Intel(R) Xeon(R) E5-2603 1.80GHz, 4 Logical Processors
+            xxxx secs
+        GPU: NVIDIA CUDA / NVS 300 (two installed)
+            xxxx secs
 
 ## Lessons learned
 
