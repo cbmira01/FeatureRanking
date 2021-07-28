@@ -146,17 +146,15 @@ this project, and present the most challenge to a workstation's capacity to solv
 this problem.
 
     "German" feature ranking runtimes on some selected platforms. These figures
-    need to be revisted as improvements are made.
+    will be revisted as improvements are made.
 
     - Lenovo 7033HH9 Desktop
         CPU: Intel(R) Core(TM) i5-2400 3.10GHz, 4 Logical Processors
-            ? secs
-        GPU:
-            ? secs
-        GPU:
-            ? secs
+            688.74 secs
+        GPU: AMD / Cedar
+            841.61 secs
         UNACCELERATED (NumPy)
-            ? secs
+            3279.15 secs
 
     - Dell Precision 3520 Laptop
         CPU: Intel(R) Core(TM) i7-7700HQ 2.80GHz, 8 Logical Processors
@@ -178,12 +176,74 @@ this problem.
 
 ## Lessons learned
 
-    Work in progress
-    - data first; data movement is explicit
-    - how to think in threads
-    - essentially map/filter/reduce
-    - difficult to debug
-    - keep decision points to a minimum
+Programming in OpenCL has been a challenge for me. Here are some observations.
+
+Data handling comes first. In OpenCL, data must be explicitly moved from main 
+memory to HPC device memory, then from device memory to high-speed local memory.
+These steps must be explictly reversed to get results back to the host program. 
+Actual computations might be as simple as an add or multiply, but positioning 
+data is the biggest job.
+
+Data movement also consumes time on the computer's interface bus. This must be 
+planned to allow data to reside on the device as long as possible to make the 
+best use of time invested in data transfers.
+
+Learning the OpenCL computation model requires some study. The terms "host", 
+"problem space", "kernel", "work item", "work group", "compute unit" and "device"
+all have definitions and relationships in this model.
+
+A "host" program can be a Python script, and runs on the computer as does any 
+other ordinary program. The host program transfers problem data to an HPC "device" 
+(such as an on-board GPU), defines the problem space, then calls a kernel. 
+
+A "problem space" is like a matrix or an array of one, two or three dimensions.
+A problem space is imposed on the data, the raw data does not carry problem space
+information. A "kernel" is a little bit of code, like a small function call. A 
+kernel is written in a dialect of C or C++. A kernel that runs at one (x,y,z) 
+place in the problem space is called a "work item". 
+
+Many hundreds or thousands of work items run in parallel at their assigned spots 
+in the problem space. Groups of work items are collected into chunks called "work 
+groups". Work items in a work group can synchronize with each other via the work 
+group's local memory and fence/barrier commands. 
+
+Work groups "tile" the problem space, and cannot be synchronized with other work 
+groups. When a group of work items complete their tasks, a work group is done. 
+When all work groups have run, the entire problem space has been visited and the 
+problem is solved. The host program can then collect results.
+
+Work groups are scheduled to run on "compute units" in the HPC device. The device
+may have one or more compute units, and work groups can run in any order on any 
+available compute unit.
+
+There's a lot more to OpenCL, but these are the basics. Other terms to consider 
+are "context" (an object that handles the elements of a complete computation), 
+and "queue" (an object that handles commands to a context). OpenCL devices can 
+also generate "events". The OpenCL platform also provides a compiler to compile
+kernel programs.
+
+An OpenCl developer must learn to think in threads. Computations visit data 
+in parallel, so the developer's job is to keep as many work items occupied
+as possible. For example, on a single-threaded CPU, a developer might use nested 
+loops to visit all of a problem space. Instead, OpenCL will just supply a kernel 
+with a couple of variables representing a general position in the problem space. 
+The developer learns to trust OpenCL to "unroll" the problem space so they can 
+focus on simple, non-conflicting thread action.
+
+Another thing that affects OpenCL performance is branching points (if/else statements).
+A branch taken by only one work item might delay the work of thousands of its
+fellow work items in its work group, because a work group can only complete when
+all its work items complete. Branching points have to be carefully considered,
+and possibly factored out and dealt with by cases.
+
+It was helpful to think of OpenCL kernels as a series of mappings, filterings, 
+and reductions, so that's why I wrote a first draft of the feature ranking problem 
+as a series of Python list comprehensions and NumPy array operations. 
+
+I have found OpenCL kernels difficult to debug, so that's something I need to 
+work on. I have managed to hang the GPU on numerous occasions. I have used unsound 
+methods and violated the spirit of HPC to get insight into how local memory and 
+thread synchronization works. There are kernel profilers available that may help.
 
     Code refactoring
     - memoize min/max/value_ranges, column extractions, column entropies
@@ -199,7 +259,7 @@ this problem.
     - on-device sample_distances zero filtering (deal with variable-length arrays)
     - minimize data moves to/from OpenCL devices
     - minimize intermediate work in global memory (global --> local --> global)
-    - how to make a multi-device execution contexts?
+    - how to make multi-device execution contexts?
     - how to launch non-blocking kernels?
 
     Future

@@ -59,7 +59,7 @@ More information about feature ranking, OpenCL, the experimental approach of
 this project, and some results are described in
 <p align="center">./doc/REPORT.md</p> 
 
-## Credits, attributions, works consulted
+## Credits
 
 Credits, attributions, and works consulted are summarized in 
 <p align="center">./doc/CREDITS.md</p> 
