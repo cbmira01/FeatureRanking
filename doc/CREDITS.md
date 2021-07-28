@@ -30,7 +30,7 @@ Scarpino, M. 2012 "OpenCL in Action"
 
 ### Software repos
 
-- [Unofficial Windows Binaries for Python Extension Packages](https://www.lfd.uci.edu/~gohlke/pythonlibs/)
+- [Unofficial Windows Binaries for Python Extension Packages](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopencl)
 - [Sture, pyopencl-in-action](https://github.com/oysstu/pyopencl-in-action)
 - [PyOpenCL examples](https://github.com/inducer/pyopencl/tree/main/examples)
 - [Nemmen, OpenCL-examples](https://github.com/rsnemmen/OpenCL-examples)
