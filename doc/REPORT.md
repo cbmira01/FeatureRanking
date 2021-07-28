@@ -103,8 +103,8 @@ operation, and is easily implemented in OpenCL.
 
 The entropy measure of a dataset, or a feature of a dataset, is a measure of,
 in some sense, the amount of "information" or "surprise" or "effort required to
-explain" embedded in the data. This measure appears to be flagging, and adding
-up, a series of "sweet spots" that are not totally "chaotic" and not totally
+explain" embedded in the data. This measure appears to be flagging and adding
+up a series of "sweet spots" that are not totally "chaotic" and not totally
 "boring", but some place in between.
 
 When feature entropies are compared with each other round-robin, the feature 
@@ -124,20 +124,20 @@ Five datasets from the UCI Machine Learning Repository were selected to showcase
 feature ranking. The datasets are called "wine", "breast", "glass", "german", and
 "cardio". More information about them can be found in CREDITS.md.
 
-The criteria for dataset selection is that the they should be of a modest size, 
+The criteria for dataset selection is that they should be of a modest size, 
 contain only numeric data (no string or character fields), and have little or
 no missing data. Instead of a machine-learning method being selected for use on
 data, in this project data was selected for the method! 
 
-The datasets were prepared by deleting columns of "key" or "id" information, 
-deleting columns related to target classification, and deleting rows containing
-missing data. This project has a framework (prep_data.py) to select a given 
-dataset, apply row and column deletions, and present it to the feature ranking 
-trial programs. 
+The datasets were prepared by deleting columns of "key" or "id" information if
+present, deleting columns related to target classification, and deleting rows 
+containing missing data. The script ./src/prep_data.py is used to select a 
+given dataset, apply row and column deletions, and present it to the feature 
+ranking programs. 
 
 In addition, two very small datasets ("simple" and "example") were prepared by 
 hand to test and debug feature ranking, and to gain confidence in the way Python
-and OpenCL handled sets of data.
+and OpenCL handles data.
 
 ## Some results
 
