@@ -50,19 +50,16 @@ are housed.
 - Run the main program: 
     > python feature_ranking.py
 
-- More information on setup is available in 
-<p align="center">./doc/INSTRUCTIONS.md</p> 
+- More information on setup is available in the project [Wiki](https://github.com/cbmira01/FeatureRanking/wiki).
 
 ## More information
 
 More information about feature ranking, OpenCL, the experimental approach of
-this project, and some results are described in
-<p align="center">./doc/REPORT.md</p> 
+this project, and results are described in the project [Wiki](https://github.com/cbmira01/FeatureRanking/wiki).
 
 ## Credits
 
-Credits, attributions, and works consulted are summarized in 
-<p align="center">./doc/CREDITS.md</p> 
+Credits, attributions, and works consulted are summarized in the project [Wiki](https://github.com/cbmira01/FeatureRanking/wiki).
 
 ## Notes for Code Louisville project grading
 
