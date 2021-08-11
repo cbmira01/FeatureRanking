@@ -22,33 +22,33 @@ are housed.
 - Open the Anaconda CMD prompt into the Conda (base) environment.
 
 - Change to your preferred local repository base directory: 
-      <p align="center">cd C:\Users\your-user-name\...\your-local-repos></p> 
+    > cd C:\Users\your-user-name\...\your-local-repos>
 
 - Clone the FeatureRanking project GitHub repository: 
-      <p align="center">git clone https://github.com/cbmira01/FeatureRanking</p> 
+    > git clone https://github.com/cbmira01/FeatureRanking
 
 - Change to the FeatureRanking project root directory: 
-      <p align="center">cd .\FeatureRanking</p> 
+    > cd .\FeatureRanking
 
 - Create the Conda environment for the project: 
-      <p align="center">conda env create --file environment.yml</p> 
+    > conda env create --file environment.yml
 
 - After packages have loaded, activate the new Conda environment:
-      <p align="center">conda activate feature_ranking</p> 
+    > conda activate feature_ranking
 
 ### Test the installation
 
 - To run Python programs, change to the .\src folder: 
-    <p align="center">cd .\src</p> 
+    > cd .\src
 
 - The quick test program will dump a list of available OpenCL devices,
   and run a very small OpenCL workload on each one: 
-      <p align="center">python quick_test.py</p> 
+    > python quick_test.py
 
 ### After a successful installation
 
 - Run the main program: 
-      <p align="center">python feature_ranking.py</p> 
+    > python feature_ranking.py
 
 - More information on setup is available in 
 <p align="center">./doc/INSTRUCTIONS.md</p> 
