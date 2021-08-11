@@ -63,20 +63,20 @@ Credits, attributions, and works consulted are summarized in the project [Wiki](
 
 ## Notes for Code Louisville project grading
 
-This project fullfills the following project requirements for Code Louisville:
+This project fullfilled requirements for the Summer 2021 Code Louisville Python session.
 
 - Implements a “master loop” console application where the user can repeatedly 
-enter commands/perform actions. This can be seen in script 
-<p align="center">./src/feature_ranking.py, near lines 72 and 86 </p>
+enter commands/perform actions, as seen in
+    > ./src/feature_ranking.py
 
-- Creates and uses a dictionary or list. This can be seen in script 
-<p align="center">./src/prep_data.py, near line 11 </p>
+- Creates and uses a dictionary or list, as seen in  
+    > ./src/prep_data.py
 
-- Reads data from external JSON and CSV files. This can be seen in script 
-<p align="center">./src/prep_data.py, near lines 11 and 46 </p>
+- Reads data from external JSON and CSV files, as seen in
+    > ./src/prep_data.py
 
-- Function calls that return values are used throughout, such as in scripts
-<p align="center">./src/fr_opencl.py, near lines 105 and 268</p>
-<p align="center">./src/feature_ranking.py, near line 72</p>
+- Function calls that return values are used throughout, for example
+    > ./src/fr_opencl.py
+    > ./src/feature_ranking.py
 
 - Implements a "stretch" goal: setup and testing of the OpenCL framework.
