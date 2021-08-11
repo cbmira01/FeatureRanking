@@ -22,7 +22,7 @@ are housed.
 - Open the Anaconda CMD prompt into the Conda (base) environment.
 
 - Change to your preferred local repository base directory: 
-    > cd C:\Users\your-user-name\...\your-local-repos>
+    > cd C:\\Users\\your-user-name\\...\\your-local-repos>
 
 - Clone the FeatureRanking project GitHub repository: 
     > git clone https://github.com/cbmira01/FeatureRanking
