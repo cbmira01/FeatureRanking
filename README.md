@@ -41,9 +41,12 @@ are housed.
 - To run Python programs, change to the .\src folder: 
     > cd .\src
 
-- The quick test program will dump a list of available OpenCL devices,
+- The quick-demo program will dump a list of available OpenCL devices
   and run a very small OpenCL workload on each one: 
-    > python quick_test.py
+    > python quick_demo.py
+
+- A few unit tests can be run:
+    > python run_tests.py
 
 ### After a successful installation
 

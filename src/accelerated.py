@@ -6,7 +6,7 @@
 import pyopencl as cl
 import numpy as np
 import sys
-from prep_data import *
+from prepare_data import *
 import time
 
 def opencl_device_driver(dataset_info):

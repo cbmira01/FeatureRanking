@@ -5,10 +5,9 @@
 #
 
 import sys
-# from trial_run import *
-from prep_data import *
-import fr_opencl
-import fr_unaccelerated 
+from prepare_data import *
+import accelerated
+import unaccelerated 
 
 
 def list_datasets():
@@ -57,8 +56,8 @@ def run_trials():
     ds_info = next((d for d in datasets_list if d['short_name'] == ds_name), None)
 
     if ds_info is not None:
-        fr_opencl.opencl_device_driver(ds_info)
-        fr_unaccelerated.ranking_protocol(ds_info)
+        accelerated.opencl_device_driver(ds_info)
+        unaccelerated.ranking_protocol(ds_info)
 
     return None
 

@@ -1,6 +1,6 @@
 
 #
-# A quick test of the PyOpenCL installation:
+# A quick demonstration of the PyOpenCL installation:
 #   - dump information on available platforms and devices
 #   - do a very small workload test on each device
 #

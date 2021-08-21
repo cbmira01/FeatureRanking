@@ -5,7 +5,7 @@
 
 import numpy as np
 import sys
-from prep_data import *
+from prepare_data import *
 import time
 
 def ranking_protocol(dataset_info):
