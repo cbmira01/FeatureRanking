@@ -5,9 +5,8 @@
 #
 
 import sys
+import trial_runner
 from prepare_data import *
-import accelerated
-import unaccelerated 
 
 
 def list_datasets():
@@ -46,24 +45,41 @@ def describe_datasets():
     return None
 
 
-def run_trials():
-    print('\nRun trials on one of the following datasets: \n')
+def run_trial():
+
+
+    # TODO: pick a dataset
+    #       pick a processor
+    #       build a trial_context
+    #       start the trial
+
+    print('\nRun a trial on one of the following datasets: \n')
 
     for ds in datasets_list:
         print(ds['short_name'], '  ', end='')
 
-    ds_name = input('\n\nPlease chose a dataset name: ').lower()
+    ds_name = input('\n\nPlease chose a dataset name: ').lower().strip()
     ds_info = next((d for d in datasets_list if d['short_name'] == ds_name), None)
 
     if ds_info is not None:
-        accelerated.opencl_device_driver(ds_info)
-        unaccelerated.ranking_protocol(ds_info)
+        trial_runner.start(ds_info)
+
+
+
+
+# def opencl_device_driver(dataset_info):
+
+    # for platform in cl.get_platforms():
+        # for device in platform.get_devices(cl.device_type.ALL):
+            # ranking_protocol(dataset_info, device)
+
+    # return None
 
     return None
 
 
 def exit_program():
-    print('\nThank you for using feature ranking...')
+    print('\nThank you for using Feature Ranking...')
     sys.exit()
     return None
 
@@ -93,4 +109,4 @@ while True:
     print('   exit ------ Exit')
     print()
 
-    switch_on(input('Choice? ').lower())
+    switch_on(input('Choice? ').lower().strip())
