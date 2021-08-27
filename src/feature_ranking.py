@@ -33,22 +33,15 @@ def list_datasets():
 
 def list_devices():
 
-    devtype_readable = { 
-        "1": "DEFAULT",
-        "2": "CPU",
-        "4": "GPU",
-        "8": "ACCELERATOR",
-        "16": "CUSTOM",
-        }
-
     print('\nOpenCL devices available...\n')
+    device_type = oh.devtype_readable
 
     if devices_available == False:
         print('No OpenCL devices were discovered on this workstation')
     else:
         for device in devices:
             print('    ', device)
-            print('        Processor type: ', devtype_readable.get(str(device.type), "Unknown..."))
+            print('        Processor type: ', device_type.get(str(device.type), "Unknown..."))
             print('        Compute units: ', device.max_compute_units)
             print('        Global memory: ', format(device.global_mem_size, '>1,d'), 'bytes')
             print('        Local memory: ', format(device.local_mem_size, '>1,d'), 'bytes')

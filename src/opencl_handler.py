@@ -5,6 +5,13 @@
 
 import pyopencl as cl
 
+devtype_readable = { 
+    "1": "DEFAULT",
+    "2": "CPU",
+    "4": "GPU",
+    "8": "ACCELERATOR",
+    "16": "CUSTOM",
+    }
 
 def discover_devices():
 
