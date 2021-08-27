@@ -8,7 +8,7 @@ import numpy as np
 import sys
 
 
-def get_value_ranges()
+def get_value_ranges():
 
     min_values_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty([features]).astype(np.float32).nbytes)
     max_values_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty([features]).astype(np.float32).nbytes)
@@ -107,11 +107,10 @@ def get_entropy(dataset, ctx, program):
     return entropy
 
 
-def pad_for_sum(arr, wgs):
-    # This function is needed to facilitate efficient summing of arrays
-    # wgs is work-group size, should be a power of two
+def pad_for_sum(array_to_pad, work_group_size):
+    # This function is needed to facilitate efficient summing of arrays in OpenCL
+    #     work_group_size should be a power of two
 
-    leftover = np.remainder(len(arr), wgs)
-    zeros = np.zeros(wgs - leftover, dtype=arr.dtype)
-    arr = np.concatenate([arr, zeros])
-    return arr
+    leftover = np.remainder(len(array_to_pad), work_group_size)
+    zeros = np.zeros(work_group_size - leftover, dtype=array_to_pad.dtype)
+    return np.concatenate([array_to_pad, zeros])

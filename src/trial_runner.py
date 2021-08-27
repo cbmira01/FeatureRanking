@@ -8,7 +8,8 @@
 import time
 import unaccelerated as unacc
 import accelerated as acc
-from prepare_data import *
+import data_handler as dh
+import opencl_handler as oh
 
 
 def start(trial_context):

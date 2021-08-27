@@ -5,9 +5,10 @@
 #
 
 import sys
-import trial_runner
-from data_handler import *
-from device_handler import *
+import math
+import trial_runner as tr
+import data_handler as dh
+import opencl_handler as oh
 
 
 def list_datasets():
@@ -16,55 +17,81 @@ def list_datasets():
 
     for ds in datasets:
         short_name = ds['short_name']
-        print('\n========================================================')
+        instances = ds['instances'] - len(ds['remove_instances'])
+        attributes = ds['attributes'] - len(ds['remove_attributes'])
+        comparisons = math.floor((instances ** 2 - instances) / 2)
+
         print('{}{}'.format(short_name.ljust(10), ds['long_name']))
         print('    abstract: ', ds['abstract'])
         print('    website: ', ds['website'])
-        print('    instances: ', ds['instances'])
-        print('    attributes: ', ds['attributes'])
-        print('    remove_attributes: ', ds['remove_attributes'])
-        print('    remove_instances: ', ds['remove_instances'])
-
-        ic = (instances ** 2 - instances) / 2
-        print('    This dataset will require ', ic, ' comparisons bewteen instances')
-
-
-    # also list number of elementwise comparisons
+        print('    clean instances: ', instances, '    clean attributes: ', attributes)
+        print('        This dataset will require ', comparisons, ' comparisons between instances')
+        print('\n', end='')
 
     return None
 
 
 def list_devices():
 
-    # for platform in cl.get_platforms():
-        # for device in platform.get_devices(cl.device_type.ALL):
-            # ranking_protocol(dataset_info, device)
+    devtype_readable = { 
+        "1": "DEFAULT",
+        "2": "CPU",
+        "4": "GPU",
+        "8": "ACCELERATOR",
+        "16": "CUSTOM",
+        }
 
-    # return None
+    print('\nOpenCL devices available...\n')
+
+    if devices_available == False:
+        print('No OpenCL devices were discovered on this workstation')
+    else:
+        for device in devices:
+            print('    ', device)
+            print('        Processor type: ', devtype_readable.get(str(device.type), "Unknown..."))
+            print('        Compute units: ', device.max_compute_units)
+            print('        Global memory: ', format(device.global_mem_size, '>1,d'), 'bytes')
+            print('        Local memory: ', format(device.local_mem_size, '>1,d'), 'bytes')
+            print('        Max work item sizes: ', device.max_work_item_sizes, 'work items')
+            print('\n', end='')
 
     return None
 
 
 def run_trial():
 
-    # new trial context trial_context = {}
+    print('\nDo feature ranking of a DATASET on a PROCESSOR... \n')
+    trial_context = {}
 
-    print('\nRun a trial... \n')
-
-    print('\nChoose a dataset: \n')
-
+    print('Datasets available:')
     for ds in datasets:
-        print(ds['short_name'], '  ', end='')
+        print('    ', ds['short_name'])
 
-    ds_name = input('\n\nPlease chose a dataset name: ').lower().strip()
-    ds_info = next((d for d in datasets_list if d['short_name'] == ds_name), None)
+    ds_choice = input('Choose a dataset: ').lower().strip()
+    dataset = next((d for d in datasets if d['short_name'] == ds_choice), None)
+    if dataset is None:
+        return None
 
-    if ds_info is not None:
-        trial_runner.start(ds_info)
+    print('\n')
+    proc = 0
+    print('Processors available:')
+    print('    ', proc, ' ---- unaccelerated option')
 
-    print('\nChoose an OpenCL device: \n')
+    for device in devices:
+        proc = proc + 1
+        print('    ', proc, ' --- ', device)
+
+    processor = int(input('Choose a processor: '))
+
+    if processor not in range(0, proc+1):
+        return None
+
+    print(dataset['short_name'], processor)
 
     # trial_runner(trial_context)
+    # trial_runner.start(ds_info)
+    return None
+
 
 def exit_program():
     print('\nThank you for using Feature Ranking...')
@@ -72,18 +99,18 @@ def exit_program():
     return None
 
 
-def switch_on(c.lower().strip()):
+def switch_on(c):
     switcher = {
         'datasets': list_datasets,
         'devices': list_devices,
-        'trial': zzz,
+        'trial': run_trial,
         'exit': exit_program
     }
     return switcher.get(c, lambda: 'Invalid')()
 
 
-datasets = discover_datasets()
-devices = discover_opencl_devices()
+datasets = dh.discover_datasets()
+devices_available, devices = oh.discover_devices()
 
 # Main command loop
 while True:
@@ -96,4 +123,4 @@ while True:
     print('   exit ------ Exit')
     print()
 
-    switch_on(input('Choice? '))
+    switch_on(input('Choice? ').lower().strip())

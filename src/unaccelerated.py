@@ -7,7 +7,7 @@ import numpy as np
 import sys
 
 
-def get_value_ranges()
+def get_value_ranges():
 
     zip_ds = [list(d) for d in zip(*dataset)]
     max_values = [max(r) for r in zip_ds]
