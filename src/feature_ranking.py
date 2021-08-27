@@ -34,7 +34,7 @@ def list_datasets():
     return None
 
 
-def list_devices(dataset_info):
+def list_devices():
 
     # for platform in cl.get_platforms():
         # for device in platform.get_devices(cl.device_type.ALL):

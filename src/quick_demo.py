@@ -10,24 +10,26 @@
 #   - pyopencl-in-action (https://github.com/oysstu/pyopencl-in-action)
 #
 
+import sys
 import pyopencl as cl
 import numpy as np
 import locale
+import opencl_handler as och
+
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
-devtype_readable = { 
-    "1": "DEFAULT",
-    "2": "CPU",
-    "4": "GPU",
-    "8": "ACCELERATOR",
-    "16": "CUSTOM",
-    }
-
 print('\n')
+platforms = []
+platforms = och.discover_opencl_platforms()
+
+if platforms == []:
+    print('There were no OpenCL platforms discovered on this workstation')
+    sys.exit()
+    
 print('OpenCL platforms and devices discovered on this workstation...\n')
 
-for platform in cl.get_platforms():
+for platform in platforms:
     print('Platform name: ', platform.name.lstrip())
 
     for device in platform.get_devices(cl.device_type.ALL):
@@ -36,7 +38,7 @@ for platform in cl.get_platforms():
         print('    ', 'Version:', device.version)
         print('    ', 'Device available? ', 'Yes' if bool(device.available) else 'No')
         print('    ', 'Compiler available? ', 'Yes' if bool(device.compiler_available) else 'No')
-        print('    ', 'Processor type: ', devtype_readable.get(str(device.type), "Unknown..."))
+        print('    ', 'Processor type: ', och.devtype_readable.get(str(device.type), "Unknown..."))
         print('    ', 'Compute units: ', device.max_compute_units)
         print('    ', 'Global memory: ', format(device.global_mem_size, '>1,d'), 'bytes')
         print('    ', 'Local memory: ', format(device.local_mem_size, '>1,d'), 'bytes')
@@ -57,7 +59,7 @@ print(f'Running a small workload on each device: ', format(array_size, '>1,d'), 
 with open('./kernels/quick_test.cl', 'r') as f:
     kernel_source = f.read()
 
-for platform in cl.get_platforms():
+for platform in platforms:
     for device in platform.get_devices(cl.device_type.ALL):
         print(device, '\n')
         print('    ', first_argument_np)
