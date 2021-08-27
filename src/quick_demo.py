@@ -47,7 +47,7 @@ for platform in cl.get_platforms():
         print('        Global memory: ', format(device.global_mem_size, '>1,d'), 'bytes')
         print('        Local memory: ', format(device.local_mem_size, '>1,d'), 'bytes')
         print('        Max work item dimensions: ', device.max_work_item_dimensions)
-        print('        Max work item sizes: ', device.max_work_item_sizes, 'work items')
+        print('        Max work item sizes: ', device.max_work_item_sizes)
 
 if device_available == False:
     print('No OpenCL devices were discovered on this workstation')

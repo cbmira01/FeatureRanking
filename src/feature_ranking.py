@@ -52,7 +52,7 @@ def list_devices():
             print('        Compute units: ', device.max_compute_units)
             print('        Global memory: ', format(device.global_mem_size, '>1,d'), 'bytes')
             print('        Local memory: ', format(device.local_mem_size, '>1,d'), 'bytes')
-            print('        Max work item sizes: ', device.max_work_item_sizes, 'work items')
+            print('        Max work item sizes: ', device.max_work_item_sizes)
             print('\n', end='')
 
     return None
