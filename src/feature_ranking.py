@@ -54,7 +54,6 @@ def list_devices():
 def run_trial():
 
     print('\nDo feature ranking of a DATASET on a PROCESSOR... \n')
-    trial_context = {}
 
     print('Datasets available:')
     for ds in datasets:
@@ -69,20 +68,27 @@ def run_trial():
     proc = 0
     print('Processors available:')
     print('    ', proc, ' ---- unaccelerated option')
-
     for device in devices:
         proc = proc + 1
         print('    ', proc, ' --- ', device)
 
-    processor = int(input('Choose a processor: '))
-
-    if processor not in range(0, proc+1):
+    processor_choice = int(input('Choose a processor: '))
+    if processor_choice not in range(0, proc+1):
         return None
+
+    if processor_choice == 0:
+        processor = 'unaccelerated'
+    else:
+        processor = devices[processor_choice - 1]
 
     print(dataset['short_name'], processor)
 
+    trial_context = {
+        "dataset": dataset,
+        "processor": processor
+    }
     # trial_runner(trial_context)
-    # trial_runner.start(ds_info)
+
     return None
 
 
@@ -112,7 +118,7 @@ while True:
     print()
     print('   datasets -- List available datasets')
     print('   devices --- List available OpenCL devices')
-    print('   trial ----- Run feature ranking trials on a dataset')
+    print('   trial ----- Run a feature ranking trial on a dataset')
     print('   exit ------ Exit')
     print()
 
