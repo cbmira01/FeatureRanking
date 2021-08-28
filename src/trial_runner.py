@@ -30,6 +30,7 @@ def start(trial_context):
 
     return None
 
+
 def build_kernels():
     # Prepare the OpenCl context, command queue and program for the current device
     # context = cl.Context([device])
@@ -80,7 +81,6 @@ def ranking_protocol(dataset_info, device):
     while True:
         # Step 2a: Find the total entropy of the remaing dataset.
         remaining_dataset = []
-
         for row in dataset:
             remaining_dataset.append([row[k] for k in range(features) if not exclude[k]])
 
@@ -124,14 +124,3 @@ def ranking_protocol(dataset_info, device):
     print(f"Ranking completed in {ranking_stop - ranking_start:0.2f} seconds")
 
     return None
-
-
-if __name__ == '__main__':
-
-    datasets_list = discover_datasets()
-
-    ds_name = 'example'
-    ds_info = next((d for d in datasets_list if d['short_name'] == ds_name), None)
-
-    if ds_info is not None:
-        start(ds_info)

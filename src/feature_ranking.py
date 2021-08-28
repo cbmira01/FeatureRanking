@@ -87,7 +87,7 @@ def run_trial():
         "dataset": dataset,
         "processor": processor
     }
-    # trial_runner(trial_context)
+    # tr.start(trial_context)
 
     return None
 
