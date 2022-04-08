@@ -40,13 +40,14 @@ for platform in cl.get_platforms():
         print('    ', 'Compute units: ', device.max_compute_units)
         print('    ', 'Global memory: ', format(device.global_mem_size, '>1,d'), 'bytes')
         print('    ', 'Local memory: ', format(device.local_mem_size, '>1,d'), 'bytes')
+        print('    ', 'Max work group size: ', device.max_work_group_size, 'work items')
         print('    ', 'Max work item dimensions: ', device.max_work_item_dimensions)
-        print('    ', 'Max work item sizes: ', device.max_work_item_sizes, 'work items')
+        print('    ', 'Max work item sizes: ', device.max_work_item_sizes)
         print('\n')
 
 
 # Prepare Python-hosted arrays
-array_size = 1000000
+array_size = 1_000_000
 first_argument_np = np.random.rand(array_size).astype(np.float32)
 second_argument_np = np.random.rand(array_size).astype(np.float32)
 result_np = np.empty(array_size).astype(np.float32)
