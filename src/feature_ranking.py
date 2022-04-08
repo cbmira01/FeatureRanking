@@ -8,6 +8,7 @@ import sys
 from prepare_data import *
 import accelerated
 import unaccelerated 
+# import ranking_protocol
 
 
 def list_datasets():
@@ -58,6 +59,8 @@ def run_trials():
     if ds_info is not None:
         accelerated.opencl_device_driver(ds_info)
         unaccelerated.ranking_protocol(ds_info)
+        # ranking_protocol(ds_info, accelerated='True')
+        # ranking_protocol(ds_info, accelerated='False')
 
     return None
 
