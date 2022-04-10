@@ -77,17 +77,20 @@ def run_trial():
         return None
 
     if processor_choice == 0:
-        processor = 'unaccelerated'
+        processor = 'unaccelerated CPU'
+        is_accelerated = False
     else:
         processor = devices[processor_choice - 1]
+        is_accelerated = True
 
     print(dataset['short_name'], processor)
 
     trial_context = {
         "dataset": dataset,
-        "processor": processor
+        "processor": processor,
+        "is_accelerated" : is_accelerated
     }
-    # tr.start(trial_context)
+    tr.start(trial_context)
 
     return None
 
