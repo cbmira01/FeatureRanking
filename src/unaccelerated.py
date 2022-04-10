@@ -6,18 +6,6 @@
 import numpy as np
 import sys
 
-
-def get_value_ranges():
-
-    zip_ds = [list(d) for d in zip(*dataset)]
-    max_values = [max(r) for r in zip_ds]
-    min_values = [min(r) for r in zip_ds]
-    value_ranges = np.subtract(max_values, min_values)
-
-
-    return None
-
-
 def get_entropy(dataset):
 
     features = len(dataset[0])
@@ -28,6 +16,11 @@ def get_entropy(dataset):
     for i in range(instances-1)
     for j in range(i+1, instances)
     ]
+
+    zip_ds = [list(d) for d in zip(*dataset)]
+    max_values = [max(r) for r in zip_ds]
+    min_values = [min(r) for r in zip_ds]
+    value_ranges = np.subtract(max_values, min_values)
 
     normalized_differences = np.divide(sample_differences, value_ranges)
 

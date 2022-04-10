@@ -25,12 +25,8 @@ def discover_devices():
     return devices
 
 
-def get_command_queue(device):
-
-    context = cl.Context([device])
-
-
-    return command_queue
+def get_context(device):
+    return context = cl.Context([device])
 
 
 def build_opencl_program(context):

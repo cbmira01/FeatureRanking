@@ -26,22 +26,11 @@ def start(trial_context):
         print('Label names: ', labels)
 
     if device:
-        trial.context.update({"is_accelerated": True})
+        is_accelerated = True
+        context = oh.get_context(device)
         program = oh.build_opencl_program(device)
     else:
-        trial.context.update({"is_accelerated": False})
-        ...
-
-    ranking_start = time.perf_counter()
-    ranking_protocol(trial_context)
-    ranking_stop = time.perf_counter()
-
-    print(f"Ranking completed in {ranking_stop - ranking_start:0.2f} seconds")
-
-    return None
-
-
-def ranking_protocol(dataset, labels, device):
+        is_accelerated = False
 
     # The ranking protocol will rank dataset features from the "least important"
     #   to the "most important", in the sense that low-ranking features
@@ -56,8 +45,10 @@ def ranking_protocol(dataset, labels, device):
     exclude = [False for k in range(features)]
     counter = 1
 
+    ranking_start = time.perf_counter()
+
     # Step 1b: Do precomputations on min/max/value ranges
-    # Step 1c: Do feature enropy precomputations
+    # Step 1c: Do feature entropy precomputations
 
     while True:
         # Step 2a: Find the total entropy of the remaing dataset.
@@ -65,7 +56,10 @@ def ranking_protocol(dataset, labels, device):
         for row in dataset:
             remaining_dataset.append([row[k] for k in range(features) if not exclude[k]])
 
-        remaining_entropy = get_entropy_opencl(remaining_dataset, context, program)
+        if is_accelerated:
+            remaining_entropy = acc.get_entropy(remaining_dataset, context, program)
+        else: 
+            remaining_entropy = unacc.get_entropy(remaining_dataset)
 
         # Step 2b: Find the entropies of each non-excluded feature.
         columns = np.array(dataset).transpose().tolist()
@@ -77,10 +71,14 @@ def ranking_protocol(dataset, labels, device):
                 feature_entropies.append(None)
                 entropy_differences.append(float('inf')) # force no test here
             else:
-                fe = get_entropy_opencl([[c] for c in columns[k]], context, program)
-                feature_entropies.append(fe)
-                ed = np.absolute(np.subtract(remaining_entropy, fe))
-                entropy_differences.append(ed)
+                if is_accelerated:
+                    feature_entropy = acc.get_entropy([[c] for c in columns[k]], context, program)
+                else:
+                    feature_entropy = acc.get_entropy([[c] for c in columns[k]])
+
+                feature_entropies.append(feature_entropy)
+                entropy_difference = np.absolute(np.subtract(remaining_entropy, fe))
+                entropy_differences.append(entropy_difference)
 
         # Step 3: Find the feature fk such that the difference between the
         #   total entropy and feature entropy for fk is minimum.
@@ -90,7 +88,7 @@ def ranking_protocol(dataset, labels, device):
         #   "least contributing" feature.
         exclude[drop_index] = True
 
-        print('   Round - ', counter, 'dropped', label_names[drop_index], end='')
+        print('   Round - ', counter, 'dropped', labels[drop_index], end='')
         print(', remaining entropy', remaining_entropy)
         if (False): # configuration
             print('    Entropy differences: ', entropy_differences)
@@ -100,5 +98,8 @@ def ranking_protocol(dataset, labels, device):
         counter = counter + 1
         if exclude.count(False) == 0:
             break
+
+    ranking_stop = time.perf_counter()
+    print(f"Ranking completed in {ranking_stop - ranking_start:0.2f} seconds")
 
     return None

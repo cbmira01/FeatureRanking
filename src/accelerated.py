@@ -8,26 +8,6 @@ import numpy as np
 import sys
 
 
-def get_value_ranges():
-
-    min_values_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty([features]).astype(np.float32).nbytes)
-    max_values_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty([features]).astype(np.float32).nbytes)
-
-    value_ranges_np = np.empty([features]).astype(np.float32)
-    value_ranges_g = cl.Buffer(ctx, mf.READ_WRITE, value_ranges_np.nbytes)
-
-    program.min_max_values(
-        queue, (features,), None, 
-        dataset_g, 
-        np.int32(features),
-        np.int32(instances), 
-        min_values_g,
-        max_values_g,
-        value_ranges_g)
-
-    return None
-
-
 def get_entropy(dataset, ctx, program):
 
     # OpenCL execution context and compiled program on hand
@@ -48,7 +28,20 @@ def get_entropy(dataset, ctx, program):
         dataset_g, np.int32(features), np.int32(instances), 
         sample_differences_g)
 
+    min_values_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty([features]).astype(np.float32).nbytes)
+    max_values_g = cl.Buffer(ctx, mf.READ_WRITE, np.empty([features]).astype(np.float32).nbytes)
 
+    value_ranges_np = np.empty([features]).astype(np.float32)
+    value_ranges_g = cl.Buffer(ctx, mf.READ_WRITE, value_ranges_np.nbytes)
+
+    program.min_max_values(
+        queue, (features,), None, 
+        dataset_g, 
+        np.int32(features),
+        np.int32(instances), 
+        min_values_g,
+        max_values_g,
+        value_ranges_g)
 
     num_rows, num_cols = np.shape(sample_differences_np)
     normalized_differences_np = np.empty([num_rows, num_cols]).astype(np.float32)
