@@ -16,14 +16,39 @@ devtype_readable = {
 def discover_devices():
 
     devices = []
-    opencl_device_available = False
 
     for platform in cl.get_platforms():
         for device in platform.get_devices(cl.device_type.ALL):
-            opencl_device_available = True
-            devices.append(device)
+            if device.available:
+                devices.append(device)
 
-    return opencl_device_available, devices
+    return devices
+
+
+def get_command_queue(device):
+
+    context = cl.Context([device])
+
+
+    return command_queue
+
+
+def build_opencl_program(context):
+
+    try: 
+        with open('./kernels/feature_ranking.cl', 'r') as f:
+            kernel_source = f.read()
+        program = cl.Program(context, kernel_source).build()
+    except:
+        print('\n\n      There was an error while building the OpenCL program...')
+        e = sys.exc_info()
+        print('\nError type: ', e[0])
+        print('\nError value: \n', e[1]) # contents of .get_build_info LOG
+        print('\nError traceback: ', e[2])
+        sys.exit()
+
+    return program
+
 
 if __name__ == '__main__':
 

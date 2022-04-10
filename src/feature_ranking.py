@@ -1,7 +1,7 @@
 
 #
 # This is the main program of the Feature Ranking project.
-# It alows the user to list datasets and OpenCL device, and prepare for a trial run.
+# It allows the user to list datasets and OpenCL devices, and prepare for a trial run.
 #
 
 import sys
@@ -14,6 +14,7 @@ import opencl_handler as oh
 def list_datasets():
  
     print('\nDatasets to choose from...\n')
+    datasets = dh.discover_datasets()
 
     for ds in datasets:
         short_name = ds['short_name']
@@ -35,8 +36,9 @@ def list_devices():
 
     print('\nOpenCL devices available...\n')
     device_type = oh.devtype_readable
+    devices = oh.discover_devices()
 
-    if devices_available == False:
+    if not devices:
         print('No OpenCL devices were discovered on this workstation')
     else:
         for device in devices:
@@ -53,9 +55,11 @@ def list_devices():
 
 def run_trial():
 
-    print('\nDo feature ranking of a DATASET on a PROCESSOR... \n')
+    print('\nPerform feature ranking of a DATASET on a computing DEVICE...')
+    datasets = dh.discover_datasets()
+    devices = oh.discover_devices()
 
-    print('Datasets available:')
+    print('\nDatasets available:')
     for ds in datasets:
         print('    ', ds['short_name'])
 
@@ -64,31 +68,30 @@ def run_trial():
     if dataset is None:
         return None
 
-    print('\n')
-    proc = 0
-    print('Processors available:')
-    print('    ', proc, ' ---- unaccelerated option')
+    print('\nDevices available:')
+    devn = 0
+    print('    ', devn, ' ---- unaccelerated option')
     for device in devices:
-        proc = proc + 1
-        print('    ', proc, ' --- ', device)
+        devn = devn + 1
+        print('    ', devn, ' --- ', device)
 
-    processor_choice = int(input('Choose a processor: '))
-    if processor_choice not in range(0, proc+1):
+    dv_choice = int(input('Choose a device: '))
+    if dv_choice not in range(0, devn + 1):
         return None
 
-    if processor_choice == 0:
-        processor = 'unaccelerated CPU'
-        is_accelerated = False
+    if dv_choice == 0:
+        device = None
+        device_name = 'unaccelerated CPU'
     else:
-        processor = devices[processor_choice - 1]
-        is_accelerated = True
+        device = devices[dv_choice - 1]
+        device_name = device.name.lstrip()
 
-    print(dataset['short_name'], processor)
+    print(dataset['short_name'], device_name)
 
     trial_context = {
         "dataset": dataset,
-        "processor": processor,
-        "is_accelerated" : is_accelerated
+        "device": device,
+        "device_name": device_name,
     }
     tr.start(trial_context)
 
@@ -110,9 +113,6 @@ def switch_on(c):
     }
     return switcher.get(c, lambda: 'Invalid')()
 
-
-datasets = dh.discover_datasets()
-devices_available, devices = oh.discover_devices()
 
 # Main command loop
 while True:

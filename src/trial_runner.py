@@ -14,42 +14,34 @@ import opencl_handler as oh
 
 def start(trial_context):
 
+    dataset = dh.get_clean_data(trial_context["dataset"], dump=False)
+    labels = dh.get_label_names(trial_context["dataset"])
+    device = trial_context["device"]
+    device_name = trial_context["device_name"]
 
-    if ds_info is not None:
-        unaccelerated.rank(ds_info)
-        accelerated.rank(ds_info)
+    print('Ranking trial of dataset ', dataset['long_name'], end='')
+    print(' on computing device ', device_name)
+    
+    if (True): # configuration
+        print('Label names: ', labels)
 
-    # TODO:
-    #       - get cleaned data
-    #       - if the processor type is OpenCL, get an OCL context and build the kernels
-    #       - run and time the ranking protocol
+    if device:
+        trial.context.update({"is_accelerated": True})
+        program = oh.build_opencl_program(device)
+    else:
+        trial.context.update({"is_accelerated": False})
+        ...
 
+    ranking_start = time.perf_counter()
+    ranking_protocol(trial_context)
+    ranking_stop = time.perf_counter()
 
-
-
+    print(f"Ranking completed in {ranking_stop - ranking_start:0.2f} seconds")
 
     return None
 
 
-def build_kernels():
-    # Prepare the OpenCl context, command queue and program for the current device
-    # context = cl.Context([device])
-
-    # try: 
-        # with open('./kernels/feature_ranking.cl', 'r') as f:
-            # kernel_source = f.read()
-
-        # program = cl.Program(context, kernel_source).build()
-    # except:
-        # print('\n\n      There was an error while building the kernel...')
-        # e = sys.exc_info()
-        # print('\nError type: ', e[0])
-        # print('\nError value: \n', e[1]) # contents of .get_build_info LOG
-        print('\nError traceback: ', e[2])
-        # sys.exit()
-
-
-def ranking_protocol(dataset_info, device):
+def ranking_protocol(dataset, labels, device):
 
     # The ranking protocol will rank dataset features from the "least important"
     #   to the "most important", in the sense that low-ranking features
@@ -57,17 +49,6 @@ def ranking_protocol(dataset_info, device):
     #   being compared. In each round, the protocol will identify the least
     #   contributing feature, then drop it from consideration in following
     #   rounds.
-
-    # dataset = get_clean_data(dataset_info, dump=False)
-    # label_names = get_label_names(dataset_info)
-
-    # print('\n')
-    # print('Trial on OpenCL device: ', device)
-    # print('Dataset: ', dataset_info['long_name'])
-    # if (False): # configuration
-        # print('Label names: ', label_names)
-
-    ranking_start = time.perf_counter()
 
     # Step 1a: Start with an initial full set of features (no exclusions).
     instances = len(dataset)
@@ -109,7 +90,7 @@ def ranking_protocol(dataset_info, device):
         #   "least contributing" feature.
         exclude[drop_index] = True
 
-        print('   Round', counter, ', dropped', label_names[drop_index], end='')
+        print('   Round - ', counter, 'dropped', label_names[drop_index], end='')
         print(', remaining entropy', remaining_entropy)
         if (False): # configuration
             print('    Entropy differences: ', entropy_differences)
@@ -119,8 +100,5 @@ def ranking_protocol(dataset_info, device):
         counter = counter + 1
         if exclude.count(False) == 0:
             break
-
-    ranking_stop = time.perf_counter()
-    print(f"Ranking completed in {ranking_stop - ranking_start:0.2f} seconds")
 
     return None
