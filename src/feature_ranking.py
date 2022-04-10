@@ -1,99 +1,126 @@
 
 #
 # This is the main program of the Feature Ranking project.
-# It alows the user to list the datasets and choose one for a trial run.
+# It allows the user to list datasets and OpenCL devices, and prepare for a trial run.
 #
 
 import sys
-from prepare_data import *
-import accelerated
-import unaccelerated 
-# import ranking_protocol
+import math
+import trial_runner as tr
+import data_handler as dh
+import opencl_handler as oh
 
 
 def list_datasets():
+ 
     print('\nDatasets to choose from...\n')
-    for ds in datasets_list:
-        print('    {}{}'.format(ds['short_name'].ljust(10), ds['long_name']))
-    return None
+    datasets = dh.discover_datasets()
 
-
-def list_datasets_with_credits():
-    for ds in datasets_list:
+    for ds in datasets:
         short_name = ds['short_name']
-        credits_file = '../data/' + short_name + '/credit.txt'
-        with open(credits_file) as file:
-            credit_text = file.read()
+        instances = ds['instances'] - len(ds['remove_instances'])
+        attributes = ds['attributes'] - len(ds['remove_attributes'])
+        comparisons = math.floor((instances ** 2 - instances) / 2)
 
-        print('\n========================================================')
-        print('{}{}'.format(short_name.ljust(10), ds['long_name']), end='')
-        print('\n', ds['abstract'])
-        print('\n', credit_text)
-    return None
-
-
-def describe_datasets():
-    for ds in datasets_list:
-        short_name = ds['short_name']
-        print('\n========================================================')
         print('{}{}'.format(short_name.ljust(10), ds['long_name']))
         print('    abstract: ', ds['abstract'])
         print('    website: ', ds['website'])
-        print('    instances: ', ds['instances'])
-        print('    attributes: ', ds['attributes'])
-        print('    remove_attributes: ', ds['remove_attributes'])
-        print('    remove_instances: ', ds['remove_instances'])
+        print('    clean instances: ', instances, '    clean attributes: ', attributes)
+        print('        This dataset will require ', comparisons, ' comparisons between instances')
+        print('\n', end='')
 
     return None
 
 
-def run_trials():
-    print('\nRun trials on one of the following datasets: \n')
+def list_devices():
 
-    for ds in datasets_list:
-        print(ds['short_name'], '  ', end='')
+    print('\nOpenCL devices available...\n')
+    device_type = oh.devtype_readable
+    devices = oh.discover_devices()
 
-    ds_name = input('\n\nPlease chose a dataset name: ').lower()
-    ds_info = next((d for d in datasets_list if d['short_name'] == ds_name), None)
+    if not devices:
+        print('No OpenCL devices were discovered on this workstation')
+    else:
+        for device in devices:
+            print('    ', device)
+            print('        Processor type: ', device_type.get(str(device.type), "Unknown..."))
+            print('        Compute units: ', device.max_compute_units)
+            print('        Global memory: ', format(device.global_mem_size, '>1,d'), 'bytes')
+            print('        Local memory: ', format(device.local_mem_size, '>1,d'), 'bytes')
+            print('        Max work item sizes: ', device.max_work_item_sizes)
+            print('\n', end='')
 
-    if ds_info is not None:
-        accelerated.opencl_device_driver(ds_info)
-        unaccelerated.ranking_protocol(ds_info)
-        # ranking_protocol(ds_info, accelerated='True')
-        # ranking_protocol(ds_info, accelerated='False')
+    return None
+
+
+def run_trial():
+
+    print('\nPerform feature ranking of a DATASET on a computing DEVICE...')
+    datasets = dh.discover_datasets()
+    devices = oh.discover_devices()
+
+    print('\nDatasets available:')
+    for ds in datasets:
+        print('    ', ds['short_name'])
+
+    ds_choice = input('Choose a dataset: ').lower().strip()
+    dataset = next((d for d in datasets if d['short_name'] == ds_choice), None)
+    if dataset is None:
+        return None
+
+    print('\nDevices available:')
+    devn = 0
+    print('    ', devn, ' ---- unaccelerated option')
+    for device in devices:
+        devn = devn + 1
+        print('    ', devn, ' --- ', device)
+
+    dv_choice = int(input('Choose a device: '))
+    if dv_choice not in range(0, devn + 1):
+        return None
+
+    if dv_choice == 0:
+        device = None
+        device_name = 'unaccelerated CPU'
+    else:
+        device = devices[dv_choice - 1]
+        device_name = device.name.lstrip()
+
+    trial_context = {
+        "dataset": dataset,
+        "device": device,
+        "device_name": device_name,
+    }
+    tr.start(trial_context)
 
     return None
 
 
 def exit_program():
-    print('\nThank you for using feature ranking...')
+    print('\nThank you for using Feature Ranking...')
     sys.exit()
     return None
 
 
 def switch_on(c):
     switcher = {
-        'list': list_datasets,
-        'describe': describe_datasets,
-        'credits': list_datasets_with_credits,
-        'trial': run_trials,
+        'datasets': list_datasets,
+        'devices': list_devices,
+        'trial': run_trial,
         'exit': exit_program
     }
     return switcher.get(c, lambda: 'Invalid')()
 
-
-datasets_list = discover_datasets()
 
 # Main command loop
 while True:
     print('\n')
     print('FEATURE RANKING main menu')
     print()
-    print('   list ------ List available datasets')
-    print('   describe -- Describe available datasets')
-    print('   credits --- List datasets with credits')
-    print('   trial ----- Run feature ranking trials on a dataset')
+    print('   datasets -- List available datasets')
+    print('   devices --- List available OpenCL devices')
+    print('   trial ----- Run a feature ranking trial on a dataset')
     print('   exit ------ Exit')
     print()
 
-    switch_on(input('Choice? ').lower())
+    switch_on(input('Choice? ').lower().strip())

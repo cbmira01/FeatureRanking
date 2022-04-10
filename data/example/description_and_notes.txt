@@ -1,14 +1,14 @@
 
-Simple dataset to help test the project
+Example dataset to help test the project
 
 12 observations, 8 features
 
-    C1: float; random
-    C2: float; random
-    C3: float; random
-    C4: float; 2 * C2
-    C5: float; 3 * C3 + 2
-    C6: float; all 0.0
-    C7: float; all 1.0
-    C8: float; all 2.0
+    Example1: float; random
+    Example2: float; random
+    Example3: float; random
+    Example4: float; 2 * C2
+    Example5: float; 3 * C3 + 2
+    Example6: float; all 0.0
+    Example7: float; all 1.0
+    Example8: float; all 2.0
     
