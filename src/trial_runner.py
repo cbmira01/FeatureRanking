@@ -6,29 +6,32 @@
 #
 
 import time
+import numpy as np
 import unaccelerated as unacc
 import accelerated as acc
 import data_handler as dh
 import opencl_handler as oh
+import sys
 
 
 def start(trial_context):
 
-    dataset = dh.get_clean_data(trial_context["dataset"], dump=False)
+    dataset_info = trial_context["dataset"]
+    dataset = dh.get_clean_data(dataset_info, dump=False)
     labels = dh.get_label_names(trial_context["dataset"])
     device = trial_context["device"]
     device_name = trial_context["device_name"]
 
-    print('Ranking trial of dataset ', dataset['long_name'], end='')
-    print(' on computing device ', device_name)
+    print('\nRanking trial of \"', dataset_info['long_name'], '\"', end='')
+    print(' on ', device_name)
     
-    if (True): # configuration
+    if (False): # configuration
         print('Label names: ', labels)
 
     if device:
         is_accelerated = True
         context = oh.get_context(device)
-        program = oh.build_opencl_program(device)
+        program = oh.build_opencl_program(context)
     else:
         is_accelerated = False
 
@@ -74,10 +77,10 @@ def start(trial_context):
                 if is_accelerated:
                     feature_entropy = acc.get_entropy([[c] for c in columns[k]], context, program)
                 else:
-                    feature_entropy = acc.get_entropy([[c] for c in columns[k]])
+                    feature_entropy = unacc.get_entropy([[c] for c in columns[k]])
 
                 feature_entropies.append(feature_entropy)
-                entropy_difference = np.absolute(np.subtract(remaining_entropy, fe))
+                entropy_difference = np.absolute(np.subtract(remaining_entropy, feature_entropy))
                 entropy_differences.append(entropy_difference)
 
         # Step 3: Find the feature fk such that the difference between the
@@ -88,8 +91,8 @@ def start(trial_context):
         #   "least contributing" feature.
         exclude[drop_index] = True
 
-        print('   Round - ', counter, 'dropped', labels[drop_index], end='')
-        print(', remaining entropy', remaining_entropy)
+        print('   Round ', counter, '-  dropped feature  ', labels[drop_index], end='')
+        print(',  remaining entropy', remaining_entropy)
         if (False): # configuration
             print('    Entropy differences: ', entropy_differences)
         sys.stdout.flush() 

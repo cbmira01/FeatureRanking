@@ -4,6 +4,7 @@
 #   and build OpenCL execution contexts.
 
 import pyopencl as cl
+import sys
 
 devtype_readable = { 
     "1": "DEFAULT",
@@ -26,7 +27,7 @@ def discover_devices():
 
 
 def get_context(device):
-    return context = cl.Context([device])
+    return cl.Context([device])
 
 
 def build_opencl_program(context):

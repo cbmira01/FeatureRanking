@@ -86,8 +86,6 @@ def run_trial():
         device = devices[dv_choice - 1]
         device_name = device.name.lstrip()
 
-    print(dataset['short_name'], device_name)
-
     trial_context = {
         "dataset": dataset,
         "device": device,
