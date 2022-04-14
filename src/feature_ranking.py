@@ -58,6 +58,7 @@ def run_trial():
     print('\nPerform feature ranking of a DATASET on a computing DEVICE...')
     datasets = dh.discover_datasets()
     devices = oh.discover_devices()
+    log_results = False
 
     print('\nDatasets available:')
     for ds in datasets:
@@ -69,14 +70,18 @@ def run_trial():
         return None
 
     print('\nDevices available:')
-    devn = 0
-    print('    ', devn, ' ---- unaccelerated option')
-    for device in devices:
-        devn = devn + 1
-        print('    ', devn, ' --- ', device)
+    print('    ', 0, ' ---- unaccelerated option')
+    for idx, device in enumerate(devices):
+        print('    ', idx+1, ' --- ', device)
 
-    dv_choice = int(input('Choose a device: '))
-    if dv_choice not in range(0, devn + 1):
+    dvc = input('Choose a device: ')
+    try:
+       int(dvc)
+    except ValueError:
+       return None
+    
+    dv_choice = int(dvc)
+    if dv_choice not in range(0, len(devices) + 1):
         return None
 
     if dv_choice == 0:
@@ -86,10 +91,15 @@ def run_trial():
         device = devices[dv_choice - 1]
         device_name = device.name.lstrip()
 
+    log_choice = input('Log results? Yes/No: ').lower().strip()
+    if log_choice == 'yes':
+        log_results = True
+
     trial_context = {
         "dataset": dataset,
         "device": device,
         "device_name": device_name,
+        "log_results": log_results
     }
     tr.start(trial_context)
 
