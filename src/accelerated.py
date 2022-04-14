@@ -6,9 +6,12 @@
 import pyopencl as cl
 import numpy as np
 import sys
+import time
 
 
 def get_entropy(dataset, ctx, program):
+
+    start_time = time.perf_counter()
 
     # OpenCL execution context and compiled program on hand
     mf = cl.mem_flags
@@ -97,7 +100,9 @@ def get_entropy(dataset, ctx, program):
     # Figure out how to do this reduction on the OpenCL device
     entropy = - np.sum(pairwise_entropies_np)
 
-    return entropy
+    stop_time = time.perf_counter()
+
+    return stop_time - start_time, entropy
 
 
 def pad_for_sum(array_to_pad, work_group_size):

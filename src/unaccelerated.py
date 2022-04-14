@@ -5,8 +5,11 @@
 
 import numpy as np
 import sys
+import time
 
 def get_entropy(dataset):
+
+    start_time = time.perf_counter()
 
     features = len(dataset[0])
     instances = len(dataset)
@@ -41,7 +44,9 @@ def get_entropy(dataset):
 
     entropy = - np.sum(pairwise_entropies)
 
-    return entropy
+    stop_time = time.perf_counter()
+
+    return stop_time - start_time, entropy
 
 
 if __name__ == '__main__':

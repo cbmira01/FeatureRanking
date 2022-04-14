@@ -5,7 +5,6 @@
 # A trial context knows about the chosen dataset and the chosen processor type.
 #
 
-import time
 import numpy as np
 import unaccelerated as unacc
 import accelerated as acc
@@ -30,8 +29,8 @@ def start(trial_context):
 
     if device:
         is_accelerated = True
-        context = oh.get_context(device)
-        program = oh.build_opencl_program(context)
+        opencl_context = oh.get_context(device)
+        program = oh.build_opencl_program(opencl_context)
     else:
         is_accelerated = False
 
@@ -47,8 +46,7 @@ def start(trial_context):
     features = len(dataset[0])
     exclude = [False for k in range(features)]
     counter = 1
-
-    ranking_start = time.perf_counter()
+    run_time = 0
 
     # Step 1b: Do precomputations on min/max/value ranges
     # Step 1c: Do feature entropy precomputations
@@ -60,9 +58,9 @@ def start(trial_context):
             remaining_dataset.append([row[k] for k in range(features) if not exclude[k]])
 
         if is_accelerated:
-            remaining_entropy = acc.get_entropy(remaining_dataset, context, program)
+            run_time1, remaining_entropy = acc.get_entropy(remaining_dataset, opencl_context, program)
         else: 
-            remaining_entropy = unacc.get_entropy(remaining_dataset)
+            run_time1, remaining_entropy = unacc.get_entropy(remaining_dataset)
 
         # Step 2b: Find the entropies of each non-excluded feature.
         columns = np.array(dataset).transpose().tolist()
@@ -75,9 +73,9 @@ def start(trial_context):
                 entropy_differences.append(float('inf')) # force no test here
             else:
                 if is_accelerated:
-                    feature_entropy = acc.get_entropy([[c] for c in columns[k]], context, program)
+                    run_time2, feature_entropy = acc.get_entropy([[c] for c in columns[k]], opencl_context, program)
                 else:
-                    feature_entropy = unacc.get_entropy([[c] for c in columns[k]])
+                    run_time2, feature_entropy = unacc.get_entropy([[c] for c in columns[k]])
 
                 feature_entropies.append(feature_entropy)
                 entropy_difference = np.absolute(np.subtract(remaining_entropy, feature_entropy))
@@ -102,8 +100,9 @@ def start(trial_context):
         if exclude.count(False) == 0:
             break
 
-    ranking_stop = time.perf_counter()
-    print(f"Ranking completed in {ranking_stop - ranking_start:0.2f} seconds")
+        run_time = run_time + run_time1 + run_time2
+
+    print(f"Time in computation: {run_time:0.2f} seconds")
 
     return None
 
