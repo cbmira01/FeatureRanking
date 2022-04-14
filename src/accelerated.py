@@ -107,3 +107,8 @@ def pad_for_sum(array_to_pad, work_group_size):
     leftover = np.remainder(len(array_to_pad), work_group_size)
     zeros = np.zeros(work_group_size - leftover, dtype=array_to_pad.dtype)
     return np.concatenate([array_to_pad, zeros])
+
+
+if __name__ == '__main__':
+
+    print('\n\nRun the main program via: python feature_ranking\n')

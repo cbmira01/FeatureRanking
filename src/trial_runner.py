@@ -106,3 +106,8 @@ def start(trial_context):
     print(f"Ranking completed in {ranking_stop - ranking_start:0.2f} seconds")
 
     return None
+
+
+if __name__ == '__main__':
+
+    print('\n\nRun the main program via: python feature_ranking\n')

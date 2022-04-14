@@ -42,3 +42,9 @@ def get_entropy(dataset):
     entropy = - np.sum(pairwise_entropies)
 
     return entropy
+
+
+if __name__ == '__main__':
+
+    print('\n\nRun the main program via: python feature_ranking\n')
+

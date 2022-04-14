@@ -49,11 +49,15 @@ def build_opencl_program(context):
 
 if __name__ == '__main__':
 
-    available, devices = discover_devices()
+    devices = discover_devices()
+    device_type = devtype_readable
 
     print('\nOpenCL devices available:')
     for device in devices:
         print('    ', device)
-
-    print('\n')
-    print('OpenCL device available? ', 'Yes' if bool(available) else 'No')
+        print('        Processor type: ', device_type.get(str(device.type), "Unknown..."))
+        print('        Compute units: ', device.max_compute_units)
+        print('        Global memory: ', format(device.global_mem_size, '>1,d'), 'bytes')
+        print('        Local memory: ', format(device.local_mem_size, '>1,d'), 'bytes')
+        print('        Max work item sizes: ', device.max_work_item_sizes)
+        print('\n', end='')
